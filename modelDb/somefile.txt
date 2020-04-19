@@ -1,0 +1,33 @@
+HTML部分
+
+
+    <form method='POST' enctype='mutipart/form-data'>
+                <input type='file' name='myfile>
+                <input type='submit'>
+    </form>
+
+后端的代码
+
+
+    def save_file(file):
+        with open('somefile.txt','wb') as fp:
+            for chunk in file.chunks():
+                fp.write(chunk)
+    def index(request):
+        if request.method == 'GET'
+            form = MyForm()
+            return render(request,'index.html',{'form':form})
+        else:
+            myfile = request.FILES.get('myfile')
+            save_file(myfile)
+            return HttpResponse('success')
+使用Models来实现文件上传
+
+
+
+from django.db import models
+
+class Article(models.Model):
+    title = models.CharField(max_lenth=100)
+    content = models.TestField()
+    thumbnial = models.FileField(upload_to='files')     //上传到files文件夹

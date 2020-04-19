@@ -1,0 +1,151 @@
+<!DOCTYPE html >
+{% load static %}
+<html>
+	<head>
+        <meta charset="utf-8"/>
+		<title>Thermal</title>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<link rel="stylesheet" href="{% static 'bootstrap/css/bootstrap.min.css' %}">
+        <script src="{% static 'bootstrap/js/jquery-3.4.1.min.js'%}"></script>
+		<script src="{% static 'bootstrap/js/popper.min.js'%}"></script>
+		<script src="{% static 'bootstrap/js/bootstrap.min.js'%}"></script>
+	</head>
+	<body>
+		<div class="container head">
+
+			<nav class="navbar navbar-expand-lg navbar-light bg-light">
+				<a class="navbar-brand" href="/homePage/">首页</a>
+				<div class="collapse navbar-collapse" id="navbarSupportedContent">
+					<ul class="navbar-nav mr-auto">
+						<li class="nav-item"><a class="nav-link" href="/model/">查询模型</a></li>
+						<li class="nav-item dropdown" >
+							<a class="nav-link dropdown-toggle" data-toggle="dropdown" >创建料号</a>
+							<div class="dropdown-menu">
+								<a class="dropdown-item"   href='/cpuUpload/' >CPU</a>
+								<a class="dropdown-item"   href='/dimmUpload/'>DIMM</a>
+								<a class="dropdown-item" href="/hddUpload/" >HDD/SSD</a>
+								<a class="dropdown-item" href="/otherUpload" >ORTHER</a>
+							</div>
+						</li>
+						<li class="nav-item"><a class="nav-link" href="/uploadPage/">模型上传</a></li>
+						<li class="nav-item"><a class="nav-link" href="/recyclebin/">回收站</a></li>
+					</ul>
+					<form class="form-inline my-2 my-lg-0" action="" method="">
+						<input class="form-control mr-sm-2" type="search" name="" id="" value="" />
+						<button class="btn btn-outline-success" type="submit">搜索</button>
+					</form>
+				</div>
+			</nav>
+			
+		</div>
+		<div class="container">
+			<table class="table" >
+				<tr>
+					<th>料号</th>
+					<th>名称</th>
+					<th>创建者</th>
+					<th>创建时间</th>
+				</tr>
+				<tr>
+					<td><input class="form-control" value="{{ id }}"/></td>
+					<td><input class="form-control" value="{{ name }}"/></td>
+					<td><input class="form-control" value="{{ creater }}"/></td>
+					<td><input class="form-control" value="{{ creatdate }}"/></td>
+				</tr>
+			</table>
+			
+			
+		</div>
+		
+		<div class="container">
+			<div class="row">
+
+			<table class="table col-9 table-striped">
+				<tr>
+					<th>指令集</th>
+					<th>CPU品牌</th>
+					<th>平台(Platform)</th>
+					<th>代号(Code)</th>
+				</tr>
+				<tr>
+					<td><input class="form-control" value="{{ list.1 }}"/></td>
+					<td><input class="form-control" value="{{ list.2 }}"/></td>
+					<td><input class="form-control" value="{{ list.3 }}"/></td>
+					<td><input class="form-control" value="{{ list.4 }}"/></td>
+				</tr>
+				<tr>
+					<th>系列(Series)</th>
+					<th>族(Family)</th>
+					<th>代(Genoration)</th>
+					<th>核心数(Core)</th>
+				</tr>
+				<tr>
+					<td><input class="form-control" value="{{ list.5 }}"/></td>
+					<td><input class="form-control" value="{{ list.6 }}"/></td>
+					<td><input class="form-control" value="{{ list.7 }}"/></td>
+					<td><input class="form-control" value="{{ list.9 }}"/></td>
+				</tr>
+				<tr>
+					<th>线程数(Threads)</th>
+					<th>主频(Frequency)</th>
+					<th>睿频(Turbo)</th>
+					<th>制程(Process)</th>
+				</tr>
+				<tr>
+					<td><input class="form-control" value="{{ list.10 }}"/></td>
+					<td><input class="form-control" value="{{ list.11 }}"/></td>
+					<td><input class="form-control" value="{{ list.12 }}"/></td>
+					<td><input class="form-control" value="{{ list.13 }}"/></td>
+				</tr>
+				<tr>
+					<th>TDP</th>
+					<th>发售状态(Statu)</th>
+					<th>发售日期(LangchDate)</th>
+					<th>插槽类型(Socket)</th>
+				</tr>
+				<tr>
+					<td><input class="form-control" value="{{ list.14 }}"/></td>
+					<td><input class="form-control" value="{{ list.15 }}"/></td>
+					<td><input class="form-control" value="{{ list.16 }}"/></td>
+					<td><input class="form-control" value="{{ list.17 }}"/></td>
+				</tr>
+				<tr>
+					<th>缓存(Cache)</th>
+					<th>支持的最大内存</th>
+					<th>支持的内存类型</th>
+					<th>是否支持ECC</th>
+				</tr>
+				<tr>
+					<td><input class="form-control" value="{{ list.18 }}"/></td>
+					<td><input class="form-control" value="{{ list.19 }}"/></td>
+					<td><input class="form-control" value="{{ list.20 }}"/></td>
+					<td><input class="form-control" value="{{ list.21 }}"/></td>
+				</tr>
+				<tr>
+					<th>是否包含GPU核心</th>
+					<th>GPU核心名称</th>
+					<td></td>
+					<td></td>
+				</tr>
+				<tr>
+					<td><input class="form-control" value="{{ list.22 }}"/></td>
+					<td><input class="form-control" value="{{ list.23 }}"/></td>
+					<td></td>
+					<td></td>
+				</tr>
+			</table>
+			<div class="col">
+				<div class="table-bordered rounded" style="height: 200px">
+					<img class="text-center" src="/static/{{ list.24 }}"  style="height: 188px;"/>
+				</div>
+<!-- 				<div style="padding-top: 30px;">
+					<a class="btn btn-secondary w-100" style=" margin-bottom: 20px;" href="/download?file_name={{ file_name }}">下载附件</a>
+				</div>
+				<td><input class="form-control"/></td>
+				<button class="btn btn-primary w-100" style="margin-bottom: 20px; margin-top: 20px;">关联项目</button> -->
+			</div>
+			</div>
+		</div>
+	</body>
+</html>

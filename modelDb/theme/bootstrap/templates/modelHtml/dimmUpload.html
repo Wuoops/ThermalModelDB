@@ -1,0 +1,172 @@
+<!DOCTYPE html >
+{% load static %}
+<html>
+	<head>
+        <meta charset="utf-8"/>
+		<title>Thermal</title>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<link rel="stylesheet" href="{% static 'bootstrap/css/bootstrap.min.css' %}">
+        <script src="{% static 'bootstrap/js/jquery-3.4.1.min.js'%}"></script>
+		<script src="{% static 'bootstrap/js/popper.min.js'%}"></script>
+		<script src="{% static 'bootstrap/js/bootstrap.min.js'%}"></script>
+
+	</head>
+	<body>
+		<!-- 模态框 -->
+		<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+							&times;
+						</button>
+						<h4 class="modal-title" id="myModalLabel">
+							模态框（Modal）标题
+						</h4>
+					</div>
+					<div class="modal-body">
+						在这里添加一些文本
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-default" data-dismiss="modal">关闭
+						</button>
+						<button type="button" class="btn btn-primary">
+							提交更改
+						</button>
+					</div>
+				</div><!-- /.modal-content -->
+			</div><!-- /.modal -->
+		</div>
+		<div class="container head">
+
+			<nav class="navbar navbar-expand-lg navbar-light bg-light">
+				<a class="navbar-brand" href="/homePage/">首页</a>
+				<div class="collapse navbar-collapse" id="navbarSupportedContent">
+					<ul class="navbar-nav mr-auto">
+						<li class="nav-item"><a class="nav-link" href="/model/">查询模型</a></li>
+						<li class="nav-item dropdown" >
+							<a class="nav-link dropdown-toggle" data-toggle="dropdown" >创建料号</a>
+							<div class="dropdown-menu">
+								<a class="dropdown-item"   href='/cpuUpload/' >CPU</a>
+								<a class="dropdown-item"   href='/dimmUpload/'>DIMM</a>
+								<a class="dropdown-item" href="/hddUpload/" >HDD/SSD</a>
+								<a class="dropdown-item" href="/otherUpload" >ORTHER</a>
+							</div>
+						</li>
+						<li class="nav-item"><a class="nav-link" href="/uploadPage/">模型上传</a></li>
+						<li class="nav-item"><a class="nav-link" href="/recyclebin/">回收站</a></li>
+					</ul>
+					<form class="form-inline my-2 my-lg-0" action="" method="">
+						<input class="form-control mr-sm-2" type="search" name="" id="" value="" />
+						<button class="btn btn-outline-success" type="submit">搜索</button>
+					</form>
+				</div>
+			</nav>
+			
+		</div>
+		<form method="POST" action="model" enctype="multipart/form-data">
+		<div class="container">
+			<table class="table text-center" >
+				<thead class="w-100">
+				<tr class="row">
+					<th class="col-3">名称</th>
+					<th class="col-3">模型来源</th>
+					<th class="col-3">关联模型ID</th>
+					<th class="col-3">创建者</th>
+				</tr>
+				</thead>
+				<tbody class="w-100">
+				<tr class="row">
+					<td class="col-3"><input id="name" name="name" class="form-control"/></td>
+					<td class="col-3">
+						<select id="source" name="source" class="form-control">
+						  <option value="OFFICIAL">官网下载</option>
+						  <option value="OWNER">用户自建</option>
+						  <option value="MODIFY">改版模型</option>
+						  <option value="OTHER">其他</option>
+						</select>
+					</td>
+					<td><input id="modify_source" name="modify_source" class="form-control"/></td>
+					<td class="col-3">
+						<select id="creater" name="creater" class="form-control">
+							{% for k,v in user_list.items %}
+								<option value= {{ k }} >{{ v }}</option>
+							{% endfor %}
+						</select>
+					</td>
+				</tr>
+				</tbody>
+			</table>
+		</div>
+		
+		<div class="container">
+			<div class="row">
+				
+			<table class="table col-9 table-striped">
+				<tr>
+					<th>品牌</th>
+					<td><input id="bord" name="bord" class="form-control" /></td>
+				</tr>
+				<tr>
+					<th>类型</th>
+					<td><input id="type" name="type" class="form-control"/></td>
+				</tr>
+				<tr>
+					<th>频率</th>
+					<td><input id="frequency" name="frequency" class="form-control"/></td>
+				</tr>
+				<tr>
+					<th>内存大小</th>
+					<td><input id="size" name="size" class="form-control"/></td>
+				</tr>
+				<tr>
+					<th>PTD</th>
+					<td><input id="ptd" name="ptd" class="form-control"/></td>
+				</tr>
+				<tr>
+					<th>其他技术</th>
+					<td><input id="other" name="other" class="form-control"/></td>
+				</tr>
+			</table>
+			<div class="col">
+				<div class="container table-bordered" style="height: 200px;margin-bottom: 30px;"></div>
+				<a class="btn btn-warning w-100" style="margin-bottom: 20px;"  data-toggle="modal" data-target="#myModal">Check</a>	
+				 <a id="upload" class="btn btn-secondary w-100" style="margin-bottom: 20px;" onclick="document.getElementById('fileul').click()" >上传封面</a>
+				<input id="fileul" type="file" class="btn btn-secondary w-100" style="margin-bottom: 20px;  display: none; " name="files"></input>
+	
+				<input type="submit" class="btn btn-primary w-100" style="margin-bottom: 20px;"></input>
+				<script>
+
+					$(function(){
+						check();
+					});
+					$(function () { 
+						$("[data-toggle='popover']").popover();
+					});
+					function check(){
+						$('#check').click(function(){	
+							var name = document.getElementById('name').value
+							var source = document.getElementById('source').value							
+							var modify_source = document.getElementById('modify_source').value
+							var creater = document.getElementById('creater').value
+
+							var bord = document.getElementById('bord').value
+							var type = document.getElementById('type').value
+							var frequency = document.getElementById('frequency').value
+							var size = document.getElementById('size').value
+							var ptd = document.getElementById('ptd').value
+							var other = document.getElementById('other').value
+							if ( name == '' &&  bord == '')
+								<!--alert("有些空格不能为空")-->
+							    document.getElementById('erro').style.display=''
+							else
+						})
+					}
+				</script>
+			</div>
+			
+		</div>
+		</form>
+	</body>
+</html>

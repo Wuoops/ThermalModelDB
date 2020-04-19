@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+{% load static %}
+
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Thermal Model</title>
+	<link rel="stylesheet" type="text/css" href="{% static 'default/css/body.css' %}"/>
+    <link rel="stylesheet" type="text/css" href="{% static 'default/css/head.css' %}"/>
+
+	<!--<link rel="stylesheet" type="text/css" href="../static/css/head.css"/>-->
+	
+</head>
+<body>
+    <div class="head">
+        <div id="Logo">
+            <div id="thermal">
+                <span>Thermal</span>
+            </div>
+            <div id="db">
+                <span>Model Database</span>
+            </div>
+        </div>
+        <div id="search">查询模型</div>
+        <div id="update">上传模型</div>
+        <div id="loginStatus">{{ username }}</div>
+    </div>
+	<!--<iframe src="../static/model/head.html?user=" width="100%" height="120px"></iframe>-->
+	<div class="body">
+    <form method="get" action="model">
+    产品类型<input type="text" name="type" value="{{ type }}">
+    模型名称<input type="text" name="name" value="{{ name }}">
+    来源<input type="text" name="source" value="{{ source }}">
+    创建人<input type="text" name="creater" value="{{ creater }}">
+            <input type="submit" value="检索">
+    </form>
+    <form method="get" action="model">
+		按日期检索
+		<div>
+		    从<input type="text" name="fy" value="{{ fy }}">年
+		        <input type="text" name="fm" value="{{ fm }}">月
+		        <input type="text" name="fd" value="{{ fd }}"> 日
+		        <input type="button" value="今天" onclick="">
+		</div>
+		<div>
+		    到<input type="text" name="ty" value="{{ ty }}">年
+		    <input type="text" name="tm" value="{{ tm }}">月
+		    <input type="text" name="tg" value="{{ tg }}"> 日
+		    <input type="button" value="今天">
+		</div>
+		<input type="submit" name="" id="" value="检索" />
+	</form>
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>模型名称</th>
+                <th>类型</th>
+                <th>平台</th>
+                <th>来源</th>
+                <th>创建人</th>
+                <th>创建时间</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for col in list %}
+                <tr>
+                    <td>{{col.0}}</td>
+                    <td>{{col.1}}</td>
+                    <td>{{col.2}}</td>
+                    <td>{{col.3}}</td>
+                    <td>{{col.4}}</td>
+                    <td>{{col.5}}</td>
+                    <td>{{col.6}}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+
+    </table>
+	
+	<div id="page">
+		<form method="get" action="model">
+			
+			<div id="pagenum">
+				第{{ page}} 页
+			</div>
+			<div id="lenPage">
+				共 {{ lenpage }}页
+			</div>
+			<div id="">
+				上一页
+			</div>
+			<div id="">
+				下一页
+			</div>
+			<div id="">跳转到
+				<input type="text" name="page" id="" value="{{ page }}" />页
+				<input type="submit" value="跳转" />
+			</div>
+		</form>
+		
+	</div>
+</div>
+</body>
+</html>

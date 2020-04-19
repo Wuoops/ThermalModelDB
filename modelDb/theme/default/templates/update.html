@@ -1,0 +1,122 @@
+<!DOCTYPE html >
+{% load static %}
+<html>
+	<head>
+		<meta charset="utf-8"/>
+		<title>Bootstrap</title>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<link rel="stylesheet" href="{% static 'bootstrap/css/bootstrap.min.css' %}">
+		<script src="{% static 'bootstrap/js/bootstrap.min.js' %} "></script>
+		<script type="text/javascript">
+			function setDate(){
+				var d = new Date();
+				document.getElementById('fy').value=d.getFullYear();
+				document.getElementById('fm').value=(d.getMonth()+1);
+				document.getElementById('fd').value=d.getDate();
+
+			}
+			function pageup(){
+				p = document.getElementById('page').value;
+				max = document.getElementById('pagemax').value;
+				// alert(p);
+				if (parseInt(p) > 1) {
+					document.getElementById('page').value=(parseInt(p)-1);
+				}
+
+
+			}
+			function pagedown(){
+				p = document.getElementById('page').value;
+				max = document.getElementById('pagemax').value;
+				// alert(max)
+				if (parseInt(p) < parseInt(max)) {
+					document.getElementById('page').value=(parseInt(p)+1);
+				}
+			}
+		</script>
+	</head>
+	<body>
+		<div class="container head">
+			<nav class="navbar navbar-expand-lg navbar-light bg-light">
+				<a class="navbar-brand" href="#">首页</a>
+				<div class="collapse navbar-collapse" id="navbarSupportedContent">
+					<ul class="navbar-nav mr-auto">
+						<li class="nav-item"><a class="nav-link" href="#">查询模型</a></li>
+						<li class="nav-item"><a class="nav-link" href="#">上传模型</a></li>
+						<!-- <li class="nav-item"><a class="nav-link" href="#">Tornado</a></li> -->
+					</ul>
+					<form class="form-inline my-2 my-lg-0" action="" method="">
+						<input class="form-control mr-sm-2" type="search" name="" id="" value="" />
+						<button class="btn btn-outline-success" type="submit">搜索</button>
+					</form>
+				</div>
+			</nav>
+			<div class="jumbotron">
+				<form method="get" action="model">
+					<div class="row">
+						<div class="col-9">
+							<table border="0px" cellspacing="" cellpadding="">
+								<tr>
+									<th>产品类型</th>
+									<th>模型名称</th>
+									<th>来源</th>
+									<th>创建人</th>
+								</tr>
+								<tr>
+									<td><input type="text" name="type" value="{{ type }}"></td>
+									<td><input type="text" name="name" value="{{ name }}"></td>
+									<td><input type="text" name="source" value="{{ source }}"></td>
+									<td><input type="text" name="creater" value="{{ creater }}"></td>
+								</tr>
+								<tr>
+									<td>从</td>
+									<td colspan="3" hidden="hidden"><input name="pagemax" value="3" id="pagemax" /></td>
+								</tr>
+								<tr>
+									<td><input type="text" name="fy" value="{{ fy }}">年</td>
+									<td><input type="text" name="fm" value="{{ fm }}">月</td>
+									<td><input type="text" name="fd" value="{{ fd }}">日</td>
+									<td><button>今天</button></td>
+								</tr>
+								<tr>
+									<td>到</td>
+									<td colspan="3"></td>
+								</tr>
+								<tr>
+									<td><input type="text" name="fy" value="{{ fy }}">年</td>
+									<td><input type="text" name="fm" value="{{ fm }}">月</td>
+									<td><input type="text" name="fd" value="{{ fd }}">日</td>
+									<td><button>今天</button></td>
+								</tr>
+							</table>
+						</div>
+						<div class="col-3">
+							<input type="submit" value="检索">
+						</div>
+					</div>
+				</div>
+					</form>
+			</div>
+		</div>
+		<div class="container main">
+			<div class="row">
+				<div class="col-9 post-list">
+					{% for col in list %}
+					<div class="card post">
+						<div class="card-body">
+							<h5 class="card-title">{{col.1}}</h5>
+							<span class="card-link">类别：{{col.2}}</span>
+							<span class="card-link">来源：{{col.4}}</span>
+							<span class="card-link">创建者：{{col.5}}</span>
+							<span class="card-link">创建时间：{{col.6}}</span>
+						</div>
+					</div>
+					{% endfor %}
+					<a onclick="pageup()">上一页</a>
+					<a onclick="pagedown()">下一页</a>
+				</div>
+			</div>
+		</div>
+	</body>
+</html>

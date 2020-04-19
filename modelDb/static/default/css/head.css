@@ -1,0 +1,42 @@
+.head {
+	width: 62.5rem;
+	height: 6.25rem;
+	background: pink;
+	margin: 0rem auto;
+}
+#Logo {
+	float: left;
+	padding: 6px;
+	background: #5C7ACD;
+	width: 300px;
+}
+#Logo span {
+	width: 300px;
+	font-size:xx-large;
+	margin-left: 15px;
+	margin: auto;
+	background: #5C7ACD;
+	font-family: "comic sans ms";
+	color: #172F73;
+}
+#thermal {
+	width: 124.61px;
+	margin: 0rem auto;
+}
+#db {
+	width: 250.98px;
+	margin: 0rem auto;}
+#search {
+	float: left;
+	margin: 1.25rem;
+}
+#update {
+	float: left;
+	margin: 1.25rem;
+}
+#loginStatus {
+	float: right;
+	margin: 10px;
+	background: skyblue;
+	margin-right: 1.25rem;
+}

@@ -1,0 +1,15 @@
+.body {
+	width: 1000px ;
+	margin: 0rem auto;
+}
+
+#d_model {
+	width: 300px;
+	background: #E6E6E6;
+	float: left;
+}
+#modify_source{
+	width: 700px;
+	background: #87CEEB;
+	float: left;
+}

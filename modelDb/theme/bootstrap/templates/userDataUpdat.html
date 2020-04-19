@@ -1,0 +1,118 @@
+<!DOCTYPE html >
+{% load static %}
+<html>
+	<head>
+		<meta charset="utf-8"/>
+		<title>Bootstrap</title>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<link rel="stylesheet" href="{% static 'bootstrap/css/bootstrap.min.css' %}">
+		<script src="{% static 'bootstrap/js/bootstrap.min.js' %} "></script>
+		<script src="{% static 'bootstrap/js/model.js' %} "></script>
+	</head>
+	<body>
+		<div class="container head">
+			<nav class="navbar navbar-expand-lg navbar-light bg-light">
+				<a class="navbar-brand" href="#">首页</a>
+				<div class="collapse navbar-collapse" id="navbarSupportedContent">
+					<ul class="navbar-nav mr-auto">
+						<li class="nav-item"><a class="nav-link" href="#">查询模型</a></li>
+						<li class="nav-item"><a class="nav-link" href="#">上传模型</a></li>
+						<!-- <li class="nav-item"><a class="nav-link" href="#">Tornado</a></li> -->
+					</ul>
+					<form class="form-inline my-2 my-lg-0" action="" method="">
+						<input class="form-control mr-sm-2" type="search" name="" id="" value="" />
+						<button class="btn btn-outline-success" type="submit">搜索</button>
+					</form>
+				</div>
+			</nav>
+            <form method="post" action="model">
+			<div class="jumbotron">
+				<table border="0px">
+								<tr>
+									<th>产品类型</th>
+									<th>模型名称</th>
+									<th>来源</th>
+									<th>创建人</th>
+									<th></th>
+								</tr>
+
+								<tr>
+									<td><input type="text" name="type" value="{{ type }}"></td>
+									<td><input type="text" name="name" value="{{ name }}"></td>
+									<td><input type="text" name="source" value="{{ source }}"></td>
+									<td><input type="text" name="creater" value="{{ creater }}"></td>
+									<td><input type="submit" value="检索"></td>
+								</tr>
+								<!--</form>-->
+								<!--<form method="get" action="model">-->
+								<tr>
+									<td>按日期查找</td>
+									<!-- <td colspan="3" hidden="hidden"><input name="pagemax" id="pagemax" value="{{ pagemax }}"  /></td> -->
+									<td colspan="3"/></td>
+								</tr>
+								<tr>
+									<td>从<input type="text" name="fy" value="{{ fy }}">年</td>
+									<td><input type="text" name="fm" value="{{ fm }}" >月</td>
+									<td><input type="text" name="fd" value="{{ fd }}">日</td>
+									<!-- <td><input type="button" onclick="setDateUp()" value="今天"></td> -->
+									<td></td>
+								</tr>
+								<tr>
+									<td>到<input type="text" name="ty" value="{{ ty }}">年</td>
+									<td><input type="text" name="tm" value="{{ tm }}">月</td>
+									<td><input type="text" name="td" value="{{ td }}">日</td>
+									<!-- <td><button onclick="setDateDown()">今天</button></td> -->
+									<td><input type="submit" value="检索"></td>
+								</tr>
+								<!--</form>-->
+							</table>
+
+					</div>
+				</div>
+		<div class="container" >
+			<div class="row">
+				<div id="col-11" >
+					<div class="container main">
+						<div class="row">
+							<div >
+								{% for col in posts.object_list %}
+								<a class="page-link" href="/{{col.2}}">
+									<div class="card post">
+										<div class="card-body">
+											<h5 class="card-title">{{col.1}}</h5>
+											<span class="card-link">类别：{{col.2}}</span>
+											<span class="card-link">来源：{{col.4}}</span>
+											<span class="card-link">创建者：{{col.5}}</span>
+											<span class="card-link">创建时间：{{col.6}}</span>
+										</div>
+									</div>
+								</a>
+								{% endfor %}
+								<!--<form method="get" action="model">-->
+
+									<div>
+										{% if posts.has_previous %}
+										<a  href="/userDataUpdat/?page={{ posts.previous_page_number }}">上一页</a>
+										{% endif %}
+										<input id="nowpage" name="page" style="width: 30px;" value="{{ page }}"/>/<a name="pagemx" >{{ pagemax }}</a>
+										{% if posts.has_next %}
+										<a  href="/userDataUpdat/?page={{ posts.next_page_number }}">下一页</a>
+										{% endif %}
+										<button id="datesub" onclick="datesub()" type="submit">跳转</button>
+
+									</div>
+
+							</div>
+						</div>
+		</div>
+				</div>
+
+			</div>
+		</div>
+        </form>
+		<footer class="container" >
+			底部
+		</footer>
+	</body>
+</html>

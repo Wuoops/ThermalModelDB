@@ -1,0 +1,155 @@
+<!DOCTYPE html >
+{% load static %}
+<html>
+	<head>
+        <meta charset="utf-8"/>
+		<title>Thermal</title>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<link rel="stylesheet" href="{% static 'bootstrap/css/bootstrap.min.css' %}">
+        <script src="{% static 'bootstrap/js/jquery-3.4.1.min.js'%}"></script>
+		<script src="{% static 'bootstrap/js/popper.min.js'%}"></script>
+		<script src="{% static 'bootstrap/js/bootstrap.min.js'%}"></script>
+	</head>
+	<body>
+		<div class="container head">
+
+			<nav class="navbar navbar-expand-lg navbar-light bg-light">
+				<a class="navbar-brand" href="/homePage/">首页</a>
+				<div class="collapse navbar-collapse" id="navbarSupportedContent">
+					<ul class="navbar-nav mr-auto">
+						<li class="nav-item"><a class="nav-link" href="/model/">物料查询</a></li>
+						<li class="nav-item dropdown" >
+							<a class="nav-link dropdown-toggle" data-toggle="dropdown" >创建料号</a>
+							<div class="dropdown-menu">
+								<a class="dropdown-item"   href='/cpuUpload/' >CPU</a>
+								<a class="dropdown-item"   href='/dimmUpload/'>DIMM</a>
+								<a class="dropdown-item" href="/hddUpload/" >HDD/SSD</a>
+								<a class="dropdown-item" href="/otherUpload" >ORTHER</a>
+							</div>
+						</li>
+						<li class="nav-item"><a class="nav-link" href="/uploadPage/">模型上传</a></li>
+						<li class="nav-item"><a class="nav-link" href="/recyclebin/">回收站</a></li>
+					</ul>
+					<form class="form-inline my-2 my-lg-0" action="" method="">
+						<input class="form-control mr-sm-2" type="search" name="" id="" value="" />
+						<button class="btn btn-outline-success" type="submit">搜索</button>
+					</form>
+				</div>
+			</nav>
+
+            <form method="get" action="model">
+			<div class="jumbotron">
+				<table border="0px" class="table text-center row" >
+							<tbody>
+								
+							
+								<tr>
+									<th class=" text-center">类型</th>
+									<th class=" text-center">名称</th>
+									<th class=" text-center">创建人</th>
+									<th class=" text-center">TDP</th>
+								</tr>
+
+								<tr>
+									<td><input type="text" name="type" value="{{ type }}" class="form-control " placeholder="类型" ></td>
+									<td><input type="text" name="name" value="{{ name }}" class="form-control " placeholder="名称" ></td>
+									<td><input type="text" name="creater" value="{{ creater }}" class="form-control " placeholder="创建人" ></td>
+									<td><input type="text" name="tdp" value="{{ tdp }}" class="form-control " placeholder="TDP" ></td>
+								</tr>
+								<!--</form>-->
+								<!--<form method="get" action="model">-->
+								<tr>
+									<td><input value="从：" class="btn disabled text-left"></td><td colspan="3"/></td>
+								</tr>
+								<!--<tr>-->
+									<!--<td><input value="从：" class="btn disabled "></td><td colspan="3"/></td>-->
+
+								<!--</tr>-->
+								<tr>
+									<td> <input type="text" class="form-control " placeholder="年" name="fy" value="{{ fm }}"></td>
+									<td><input type="text" name="fm" value="{{ fm }}" class="form-control "  placeholder="月" ></td>
+									<td><input type="text" name="fd" value="{{ fd }}" class="form-control "  placeholder="日"></td>
+									<td><input value="到" class="btn disabled "></td>
+									<!-- <td><input type="button" onclick="setDateUp()" value="今天"></td> -->
+									<td></td>
+								</tr>
+								<tr>
+									<td><input type="text" name="ty" value="{{ ty }}" class="form-control "  placeholder="年"></td>
+									<td><input type="text" name="tm" value="{{ tm }}" class="form-control "  placeholder="月"></td>
+									<td><input type="text" name="td" value="{{ td }}" class="form-control "  placeholder="日"></td>
+									<!-- <td><button onclick="setDateDown()">今天</button></td> -->
+									<td><input type="submit" value="检索" class="btn btn-primary w-100"></td>
+								</tr>
+								<!--</form>-->
+								</tbody>
+							</table>
+
+					</div>
+				</div>
+		<div class="container" >
+			<table class="table table-hover table-striped text-center" >
+				<thead class="thead-light">
+					<tr>
+						<th>ID</th>
+						<th>模型名称</th>
+						<th>类型</th>
+						<!--<th>平台</th>-->
+						<!-- <th>来源</th> -->
+						<th>创建人</th>
+						<th>创建时间</th>
+						<th>TDP</th>
+						<!-- <th>操作</th> -->
+					</tr>
+				</thead>
+				<tbody>
+					{% for col in  posts.object_list %}
+						<tr onclick="window.document.location = '/resupload?id={{col.0}}'">
+							<td>{{col.0}}</td>
+							<td>{{col.1}}</td>
+							<td>{{col.2}}</td>
+							<td>{{col.4}}</td>
+							<td>{{col.5}}</td>
+							<td>{{col.6}}</td>
+							<!-- <td>{{col.7}}</td> -->
+<!-- 							<td onclick="event.stopPropagation()">
+								<button type="button" class="btn-sm btn-outline-secondary" onclick="window.document.location = '/{{col.2}}Upload?id={{col.0}}'">编辑</button>
+								<button type="button" class="btn-sm btn-danger" onclick="window.document.location = '/modeldelete?mid={{col.0}}'" >删除</button>
+							</td> -->
+						</tr>
+					{% endfor %}
+				</tbody>
+
+			</table>
+				<div class="container">
+					<div class="row">
+					<div class="col-8">
+					</div>
+					<table class="table col-4 pull-right">
+						<tr>
+							<td>{% if posts.has_previous %}
+								<a  href="/model/?page={{ posts.previous_page_number }}&type={{ type }}&name={{ name }}&source={{ source }}&creater={{ creater }}&fy={{ fy }}&fm={{ fm }}&fd={{ fd }}&ty={{ ty }}&tm={{ tm }}&td={{ td }}">上一页</a>
+								{% endif %}
+							</td>
+							<td><input class="form-control-ms text-center" style="width: 45px;" id="nowpage" name="page" value="{{ page }}"/>
+							 /<a name="pagemax" >{{ pagemax }}</a>
+							</td>
+							<td>
+								{% if posts.has_next %}
+								<a  href="/model/?page={{ posts.next_page_number }}&type={{ type }}&name={{ name }}&source={{ source }}&creater={{ creater }}&fy={{ fy }}&fm={{ fm }}&fd={{ fd }}&ty={{ ty }}&tm={{ tm }}&td={{ td }}">下一页</a>
+								{% endif %}
+							</td>
+							<td><button class="btn btn-primary w-100" type="submit">跳转</button></td>								
+						</tr>
+					</table>
+						
+		</div>
+				</div>
+			</form>
+		</div>
+		<footer class="container text-center" >
+			<hr >
+			<span class="text-muted" style="margin: 15px;">Powered by Wu.Quentin@inventec.com</span>
+		</footer>
+	</body>
+</html>

@@ -1,0 +1,110 @@
+<!DOCTYPE html >
+{% load static %}
+<html>
+<!--资源详情页-->
+	<head>
+        <meta charset="utf-8"/>
+		<title>Thermal</title>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<link rel="stylesheet" href="{% static 'bootstrap/css/bootstrap.min.css' %}">
+        <script src="{% static 'bootstrap/js/jquery-3.4.1.min.js'%}"></script>
+		<script src="{% static 'bootstrap/js/popper.min.js'%}"></script>
+		<script src="{% static 'bootstrap/js/bootstrap.min.js'%}"></script>
+	</head>
+	<body>
+		<div class="container head">
+			<nav class="navbar navbar-expand-lg navbar-light bg-light">
+				<a class="navbar-brand" href="/homePage/">首页</a>
+				<div class="collapse navbar-collapse" id="navbarSupportedContent">
+					<ul class="navbar-nav mr-auto">
+						<li class="nav-item"><a class="nav-link" href="/model/">查询模型</a></li>
+						<li class="nav-item dropdown" >
+							<a class="nav-link dropdown-toggle" data-toggle="dropdown" >创建料号</a>
+							<div class="dropdown-menu">
+								<a class="dropdown-item"   href='/cpuUpload/' >CPU</a>
+								<a class="dropdown-item"   href='/dimmUpload/'>DIMM</a>
+								<a class="dropdown-item" href="/hddUpload/" >HDD/SSD</a>
+								<a class="dropdown-item" href="/otherUpload" >ORTHER</a>
+							</div>
+						</li>
+						<li class="nav-item"><a class="nav-link" href="/uploadPage/">模型上传</a></li>
+						<li class="nav-item"><a class="nav-link" href="/recyclebin/">回收站</a></li>
+					</ul>
+					<form class="form-inline my-2 my-lg-0" action="" method="">
+						<select name="branch" class="form-control text-center" style="width:  200px">
+							<option value= 0 >版本分支检索</option>
+							{% for k,v in branch_list.items %}
+								<option value= {{ k }} >{{ v }}</option>
+							{% endfor %}
+						</select>
+					
+
+						<button class="btn btn-outline-success" type="submit">搜索</button>
+					</form>
+				</div>
+			</nav>
+		</div>
+		<div class="container" >
+			<table class="table table-hover table-striped text-center" >
+				<thead class="thead-light">
+					<tr>
+						<!-- <th>ID</th> -->
+						<th>模型名称</th>
+						<th>版本分支</th>
+						<th>版本号</th>
+						<th>创建人</th>
+						<th>备注</th>
+						<th>创建时间</th>
+						<th>操作</th>
+					</tr>
+				</thead>
+				<tbody>
+					{% for col in  list.object_list %}
+						<tr onclick="window.document.location = '/{{col.10}}?id={{col.2}}'" style="background-color: {{col.12}};">
+							<!-- <td>{{col.0}}</td> -->
+							<td>{{col.1}}</td>
+							<td>{{col.11}}</td>
+							<td>{{col.13}}-{{col.3}}</td>
+							<td>{{col.6}}</td>
+							<td>{{col.7}}</td>
+							<td>{{col.8}}</td>
+							<td onclick="event.stopPropagation()">
+								<button type="button" class="btn-sm btn-outline-secondary" onclick="window.document.location = '/{{col.10}}?id={{col.2}}'">物料详情</button>
+								<button type="button" class="btn-sm btn-success" onclick="window.document.location = '/download?file_name={{ col.4 }}'" >模型下载</button>
+							</td>
+						</tr>
+					{% endfor %}
+				</tbody>
+		
+			</table>
+				<div class="container">
+					<div class="row">
+					<div class="col-8">
+					</div>
+					<table class="table col-4 pull-right">
+						<tr>
+							<td>{% if posts.has_previous %}
+								<a  href="/model/?page={{ posts.previous_page_number }}&type={{ type }}&name={{ name }}&source={{ source }}&creater={{ creater }}&fy={{ fy }}&fm={{ fm }}&fd={{ fd }}&ty={{ ty }}&tm={{ tm }}&td={{ td }}">上一页</a>
+								{% endif %}
+							</td>
+							<td><input class="form-control-ms text-center" style="width: 45px;" id="nowpage" name="page" value="{{ page }}"/>
+							 /<a name="pagemax" >{{ pagemax }}</a>
+							</td>
+							<td>
+								{% if posts.has_next %}
+								<a  href="/model/?page={{ posts.next_page_number }}&type={{ type }}&name={{ name }}&source={{ source }}&creater={{ creater }}&fy={{ fy }}&fm={{ fm }}&fd={{ fd }}&ty={{ ty }}&tm={{ tm }}&td={{ td }}">下一页</a>
+								{% endif %}
+							</td>
+							<td><button class="btn btn-primary w-100" type="submit">跳转</button></td>								
+						</tr>
+					</table>
+		</div>
+		
+
+		<footer class="container text-center" >
+			<hr >
+			<span class="text-muted" style="margin: 15px;">Powered by Wu.Quentin@inventec.com</span>
+		</footer>
+	</body>
+</html>

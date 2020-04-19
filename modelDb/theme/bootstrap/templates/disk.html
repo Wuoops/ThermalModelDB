@@ -1,0 +1,99 @@
+<!DOCTYPE html >
+{% load static %}
+<html>
+	<head>
+        <meta charset="utf-8"/>
+		<title>Thermal</title>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<link rel="stylesheet" href="{% static 'bootstrap/css/bootstrap.min.css' %}">
+        <script src="{% static 'bootstrap/js/jquery-3.4.1.min.js'%}"></script>
+		<script src="{% static 'bootstrap/js/popper.min.js'%}"></script>
+		<script src="{% static 'bootstrap/js/bootstrap.min.js'%}"></script>
+	</head>
+	<body>
+		<div class="container head">
+
+			<nav class="navbar navbar-expand-lg navbar-light bg-light">
+				<a class="navbar-brand" href="/homePage/">首页</a>
+				<div class="collapse navbar-collapse" id="navbarSupportedContent">
+					<ul class="navbar-nav mr-auto">
+						<li class="nav-item"><a class="nav-link" href="/model/">查询模型</a></li>
+						<li class="nav-item dropdown" >
+							<a class="nav-link dropdown-toggle" data-toggle="dropdown" >创建料号</a>
+							<div class="dropdown-menu">
+								<a class="dropdown-item"   href='/cpuUpload/' >CPU</a>
+								<a class="dropdown-item"   href='/dimmUpload/'>DIMM</a>
+								<a class="dropdown-item" href="/hddUpload/" >HDD/SSD</a>
+								<a class="dropdown-item" href="/otherUpload" >ORTHER</a>
+							</div>
+						</li>
+						<li class="nav-item"><a class="nav-link" href="/uploadPage/">模型上传</a></li>
+						<li class="nav-item"><a class="nav-link" href="/recyclebin/">回收站</a></li>
+					</ul>
+					<form class="form-inline my-2 my-lg-0" action="" method="">
+						<input class="form-control mr-sm-2" type="search" name="" id="" value="" />
+						<button class="btn btn-outline-success" type="submit">搜索</button>
+					</form>
+				</div>
+			</nav>
+			
+		</div>
+		<div class="container">
+			<table class="table" >
+				<tr>
+					<th>名称</th>
+					<th>模型来源</th>
+					<th>关联模型ID</th>
+					<th>创建者</th>
+				</tr>
+				<tr>
+					<td><input class="form-control" value="{{ name }}"/></td>
+					<td><input class="form-control" value="{{ source }}"/></td>
+					<td><input class="form-control" value="{{ modify_source }}"/></td>
+					<td><input class="form-control" value="{{ creater }}"/></td>
+				</tr>
+			</table>
+		</div>
+		
+		<div class="container">
+			<div class="row">
+				
+			<table class="table col-9 table-striped">
+				<tr>
+					<th>品牌</th>
+					<th>类型</th>
+					<th>容量</th>
+					<th>转速</th>
+				</tr>
+				<tr>
+					<td><input class="form-control" value="{{ list.0 }}"/></td>
+					<td><input class="form-control" value="{{ list.1 }}"/></td>
+					<td><input class="form-control" value="{{ list.2 }}"/></td>
+					<td><input class="form-control" value="{{ list.3 }}"/></td>
+				</tr>
+				<tr>
+					<th>PTD</th>
+					<th>接口</th>
+					<td>其他技术</td>
+					<td></td>
+				</tr>
+				<tr>
+					<td><input class="form-control" value="{{ list.4 }}"/></td>
+					<td><input class="form-control" value="{{ list.5 }}"/></td>
+					<td><input class="form-control" value="{{ list.6 }}"/></td>
+				</tr>
+			</table>
+			<div class="col">
+				<div class="container table-bordered rounded" style="height: 200px;margin-bottom: 30px;">
+					
+				</div>
+				<a class="btn btn-secondary w-100" style="margin-bottom: 20px;" href="/download?file_name={{ file_name }}">下载附件</a>
+				<!--<a class="btn btn-secondary w-100" style="margin-bottom: 20px;" href="/static/sdr.zip">下载附件</a>-->
+				<td><input class="form-control"/></td>
+				<button class="btn btn-primary w-100" style="margin-bottom: 20px; margin-top: 20px;">关联项目</button>
+			</div>
+			</div>
+		</div>
+	</body>
+</html>
