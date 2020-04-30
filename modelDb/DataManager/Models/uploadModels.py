@@ -1,7 +1,7 @@
 from dao.uitlsPlus import *
 from django.db import models
 from django.core.files.storage import FileSystemStorage
-
+import os
 
 def getUsers():
     obj = Utils()
@@ -59,3 +59,7 @@ def updateCpuTable():
 #文件上传
 class FileUpload(models.Model):
     fileUl = models.FileField(upload_to='files')
+#判断文件夹是否存在，如果不存在则创建一个
+def mkdir_p(path):
+    if (os.path.exists(path) == False):
+        os.mkdir(path)

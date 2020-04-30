@@ -1,0 +1,105 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="card container" style="margin-top : 10px">
+    <div class="row">
+        <div class="col-4">
+            <div class="card-body" style="margin:10px;">
+            <h1 class="card-title">{{ materInfoList.0 }}</h1>
+            <h5 class="card-title">{{ materInfoList.5 }}&nbsp{{ materInfoList.3 }}&nbsp{{ materInfoList.4 }}</h5>
+            </div>
+        </div>
+        <div class="col text-right">
+            <span class="text-light bg-secondary">{{ materInfoList.1 }}</span>
+            <div></div>
+            <span class="text-light bg-secondary">{{ materInfoList.2 }}</span>
+        </div>
+    </div>
+    <div class="row">
+<!--        原始数据,提交修改-->
+        <div class="col-4">
+            <form method="post" action="/updateMaterialTags">
+                <table class="table">
+                    <tr style="display:none"><td><input name="id" value="{{ mid }}"></td></tr>
+                    {% for k,v in taglist.items %}
+                    <tr>
+                        <th>{{ k }}</th>
+                        <td><input name="{{ k }}" value="{{ v }}"></td>
+                    </tr>
+                    {% endfor%}
+                    <tr><td colspan="2"><button class="btn w-100" type="submit">提交修改</button></td></tr>
+                </table>
+            </form>
+        </div>
+<!--        新增数据-->
+        <div class="col">
+        <form method="post" action="/createtags">
+            <div id="div1"></div>
+            <table class="table" id="table">
+                <tr>
+                    <th>Key</th>
+                    <td><input name="inputKey0"></td>
+                    <th>Value</th>
+                    <td><input name="inputValue0"></td>
+                </tr>
+                <tr style="display:none"><td><input name="id" value="{{ mid }}"></td></tr>
+            </table>
+
+
+            <table class="table">
+                <tr>
+                    <td><button class="btn w-100"type="button" onclick="addOne()">新增一条</button></td>
+                    <td><button class="btn w-100" type="button" onclick="delOne()">删除一行</button></td>
+                    <td><button class="btn w-100" type="submit">提交</button></td>
+                </tr>
+            </table>
+        </form>
+        </div>
+    </div>
+</div>
+
+
+<script>
+    var num=1
+    function addOne(){
+        var table = document.getElementById('table');
+        var tr = document.createElement("tr");
+        var thKey = document.createElement("th");
+        var thValue = document.createElement("th");
+
+        var tdK = document.createElement("td");
+        var tdV = document.createElement("td");
+
+        var inputKey = document.createElement("input");
+        var inputValue = document.createElement("input");
+
+        inputKey.setAttribute("name","inputKey"+num);
+        inputValue.setAttribute("name","inputValue"+num);
+
+
+        tr.setAttribute("name","tr"+num);
+        tr.setAttribute("id","tr"+num);
+        thKey.setAttribute("id","th"+num);
+
+        thKey.innerHTML='Key'
+        thValue.innerHTML='Value'
+        table.appendChild(tr);
+        tr.appendChild(thKey);
+        tr.appendChild(tdK);
+
+        tdK.appendChild(inputKey);
+        tr.appendChild(thValue);
+        tr.appendChild(tdV);
+        tdV.appendChild(inputValue);
+
+
+        num=num+1
+    }
+    function delOne(){
+        num--;
+        var table = document.getElementById('table');
+        var tr = document.getElementById('tr'+num);
+        var tdk = document.getElementById('tr'+num);
+        table.removeChild(tr);
+    }
+</script>
+{% endblock %}

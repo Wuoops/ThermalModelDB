@@ -1,0 +1,88 @@
+{% extends 'base.html' %}
+{% block content %}
+{% load static %}
+<form method="POST" action="resBranch" enctype="multipart/form-data">
+		<div class="container">
+			<div class="row">
+				<div class="col">
+					<table  class=" container table table-hover table-striped text-center">
+						<tr>
+							<th colspan="2">物料确认</th>
+						</tr>
+						<tr class="row">
+							<th class="thead-light col">料号</th>
+							<td class="thead-light col"><input name="mid" class="form-control mr-sm-2 col" value="{{ list.0 }}" /></td>
+						</tr>
+						<tr class="row">
+							<th class="col thead-light">名称</th>
+							<td class="thead-light col"><input class="col form-control mr-sm-2"  value="{{ list.1 }}"/></td>
+						</tr>
+						<tr class="row">
+							<th class="thead-light col">类型</th>
+							<td class="thead-light col"><input class="form-control mr-sm-2 col"  value="{{ list.2 }}"/></td>
+						</tr>
+						<tr class="row">
+							<th class="thead-light col">创建者</th>
+							<td class="thead-light col"><input class="form-control mr-sm-2 col"  value="{{ list.3 }}"/></td>
+						</tr>
+
+					</table>
+				</div>
+				<div class="col" >
+					<table  class=" container table table-hover table-striped text-center">
+						<tr>
+							<th colspan="2">版本确认</th>
+						</tr>
+						<tr class="row">
+							<th class="thead-light col">版本分支</th>
+							<td class="thead-light col">
+								<select id="creater" name="branch" class="form-control">
+									{% for k,v in branch_list.items %}
+										<option value= {{ k }} >{{ v }}</option>
+									{% endfor %}
+								</select>
+							</td>
+						</tr>
+						<tr class="row">
+							<th class="col thead-light">当前版本</th>
+							<td class="thead-light col" ><input name="version" class="col form-control mr-sm-2"  value="{{ list.5 }}"/></td>
+						</tr>
+						<tr class="row">
+<!--							<th class="thead-light col">创建人</th>-->
+<!--							<td class="thead-light col">-->
+<!--								<input name="remarks" class="form-control mr-sm-2 col" />-->
+<!--								<select id="" name="owner" class="form-control">-->
+<!--									{% for k,v in user_list.items %}-->
+<!--										<option value= {{ k }} >{{ v }}</option>-->
+<!--									{% endfor %}-->
+<!--								</select>-->
+<!--							</td>-->
+<!--						</tr>-->
+						<tr class="row">
+							<th class="thead-light col">版本描述</th>
+							<td class="thead-light col"><input name="remarks" class="form-control mr-sm-2 col" /></td>
+						</tr>
+
+					</table>
+				</div>
+			</div>
+			<div class="row">
+				{% autoescape off %}
+				{{ branch_set }}
+				{% endautoescape %}
+				<div class="col">
+					<!-- <td><input type="submit" value="选择文件" class="btn btn-primary w-100"></td> -->
+<!--					<a id="upload" class="btn btn-secondary w-100" style="margin-bottom: 20px;" onclick="document.getElementById('fileul').click()" >选择文件</a>-->
+<!--					<input id="fileul" type="file" multiple = "multiple" class="btn btn-secondary w-100" style="margin-bottom: 20px;  display: none; " name="files"></input>-->
+					<input id="fileul" type="file" multiple = "multiple" class="btn btn-secondary w-100" style="margin-bottom: 20px;  " name="files">
+				</div>
+				<div class="col">
+<!--					<input class="form-control mr-sm-2" />-->
+				</div>
+				<div class="col">
+					<td><input type="submit" value="上传" class="btn btn-success w-100"></td>
+				</div>
+			</div>
+		</div>
+</form>
+{% endblock %}

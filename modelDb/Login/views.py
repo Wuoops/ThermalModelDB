@@ -1,33 +1,21 @@
 from django.shortcuts import render,redirect
-from dao.daoUtils import *
 
-class LoginView():
-    usernamme = 'Wuuops'
-    def login(request):
+from django.contrib.auth import authenticate, login
 
-        if request.method == 'POST':
-            u = request.POST.get('username')
-            p = request.POST.get('pwd')
-            LoginView.username = LoginView.check(u,p)
+def login_view(request):
 
-            if LoginView.username == 0:
-                return render(request,'login.html',{'msg':'用户名或密码错误'})
+    if (request.method == 'POST'):
+        username = request.POST.get('username')
+        password = request.POST.get('password')
+        user = authenticate(request, username=username, password=password)
+        if user is not None:
+            login(request, user)
+            next = request.GET.get('next')
+            if next != None:
+                return redirect(next)
             else:
-                return redirect('/model/')
-
+                return redirect('/homepage/')
         else:
-            print(request.GET)
             return render(request,'login.html')
-
-    def index(request):
-        pass
-    #检查账号密码，返回用户名
-    def check(username,pwd):
-        sql = 'SELECT * FROM d_users AS S WHERE S.user_name = "%s"  '
-        result = searchDataP(sql,username)
-        if (result.__len__() == 1 ):
-            return result[0][3]
-        else:
-            print('账号或密码错误')
-            print(result)
-            return 0
+    else:
+        return render(request,'login.html')

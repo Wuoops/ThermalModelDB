@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from django.core.paginator import Paginator,Page,PageNotAnInteger,EmptyPage
 from DataManager.Models.models import *
-from Login.views import LoginView
+# from Login.views import LoginView
 import datetime
 from dao.uitlsPlus import Utils
 

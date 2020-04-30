@@ -1,0 +1,94 @@
+{% extends 'base.html' %}
+{% block content %}
+{% load static %}
+
+<div class="container" >
+	<div class="row">
+		<div class="col-xs-2">
+			<div class="card">
+			<div class="card-body">
+			<h3 class="card-title">{{ materInfo.0 }}</h3>
+			<h5 class="card-title">{{ materInfo.5 }}&nbsp{{ materInfo.3 }}&nbsp{{ materInfo.4 }}</h5>
+			<span class="text-light bg-secondary">{{ materInfo.1 }}</span>
+			<div></div>
+			<!--      <span class="bg-secondary">Create Time:</span>-->
+			<span class="text-light bg-secondary">{{ materInfo.2 }}</span>
+
+			<table class="table">
+			{% for k,v in taglist.items %}
+			  <tr>
+				<th>{{ k }}</th>
+				<td>{{ v }}</td>
+			  </tr>
+			{% endfor %}
+			</table>
+			<a href="/createtags?id={{ mid }}" class="btn btn-primary">纠错 / 新增</a>
+			</div>
+			</div>
+		</div>
+		<div class="col">
+			<table class="table table-hover table-striped text-center" >
+			<thead class="thead-light">
+			<tr>
+				<!-- <th>ID</th> -->
+				<th>模型名称</th>
+				<th>版本分支</th>
+				<th>版本号</th>
+				<th>创建人</th>
+				<th>备注</th>
+				<th>创建时间</th>
+				<th>操作</th>
+			</tr>
+			</thead>
+			<tbody>
+			{% for col in  posts.object_list %}
+				<tr  style="background-color: {{col.12}};">
+					<!-- <td>{{col.0}}</td> -->
+					<td>{{col.1}}</td>
+					<td>{{col.11}}</td>
+					<td>{{col.13}}-{{col.3}}</td>
+					<td>{{col.6}}</td>
+					<td>{{col.7}}</td>
+					<td>{{col.8}}</td>
+					<td onclick="event.stopPropagation()">
+			<!--						<button type="button" class="btn-sm btn-outline-secondary" onclick="window.document.location = '/materialtags?id={{col.2}}'">物料详情</button>-->
+						<button type="button" class="btn-sm btn-success" onclick="window.document.location = '{{ ftpAddr }}{{ col.4 }}'" >下载附件</button>
+					</td>
+				</tr>
+			{% endfor %}
+			</tbody>
+			</table>
+		</div>
+	</div>
+
+</div>
+<div class="container">
+	<div class="row">
+	<div class="col-8"></div>
+	</table>
+		<div class="container">
+			<div class="row">
+			<div class="col-8">
+			</div>
+			<table class="table col-4 pull-right">
+				<tr>
+					<td>{% if posts.has_previous %}
+						<a  href="/resource/?page={{ posts.previous_page_number }}&id={{ mid }}">上一页</a>
+						{% endif %}
+					</td>
+					<td><input class="form-control-ms text-center" style="width: 45px;" id="nowpage" name="page" value="{{ page }}"/>
+					 /<a name="pagemax" >{{ pagemax }}</a>
+					</td>
+					<td>
+						{% if posts.has_next %}
+						<a  href="/resource/?page={{ posts.next_page_number }}&id={{ mid }}">下一页</a>
+						{% endif %}
+					</td>
+					<td><button class="btn btn-primary w-100" type="submit">跳转</button></td>
+				</tr>
+			</table>
+</div>
+</div>
+	</div>
+</div>
+{% endblock %}

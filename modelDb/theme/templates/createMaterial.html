@@ -1,0 +1,85 @@
+{% extends 'base.html' %}
+{% block content %}
+<form method="post" >
+	<div class="container">
+		<div class="row">
+			<div class="col-6">
+				<table class="table table-hover table-striped text-center" >
+					<thead class="thead-light">
+						<tr>
+							<th>类型<span class="text-danger">&nbsp*</span></th>
+							<td>
+								<select name="type" class="form-control text-center w-100" style="width:  200px">
+									{% for type in typeData %}
+										<option value= {{ type }} >{{ type }}</option>
+									{% endfor %}
+								</select>
+							</td>
+						</tr>
+						<tr>
+							<th>品牌<span class="text-danger">&nbsp*</span></th>
+							<td>
+								<input class="form-control"  name="brand"  value={{ brand }} >
+							</td>
+						</tr>
+						<tr>
+							<th>型号<span class="text-danger">&nbsp*</span></th>
+							<td>
+								<input class="form-control"  name="name" value={{ name }} >
+							</td>
+						</tr>
+						<tr>
+							<th>TDP</th>
+							<td>
+								<input class="form-control"  name="TDP" value={{ TDP }} >
+							</td>
+						</tr>
+						<tr>
+							<th>SPEC</th>
+							<td>
+								<input class="form-control"  name="SPEC" value={{ SPEC }} >
+							</td>
+						</tr>
+						<tr>
+							<th>平台(CPU Only<span class="text-danger">&nbsp*</span>)</th>
+							<td>
+								<select name="platform" class="form-control text-center w-100" style="width:  200px">
+									{% for platform in platformList %}
+										<option value= {{ platform }} >{{ platform }}</option>
+									{% endfor %}
+								</select>
+							</td>
+						</tr>
+						<tr>
+							<th>代号(CPU Only<span class="text-danger">&nbsp*</span>)</th>
+							<td>
+								<select name="platform" class="form-control text-center w-100" style="width:  200px">
+									{% for code in codeList %}
+										<option value= {{ code }} >{{ code }}</option>
+									{% endfor %}
+								</select>
+							</td>
+						</tr>
+					</thead>
+				</table>
+			</div>
+			<div class="col-6">
+							<table class="table table-hover table-striped text-center" >
+					<thead class="thead-light">
+						<tr>
+							<td><input type="submit" value="提交并完善详细信息" name="next"  class="btn btn-info w-100"></td>
+						</tr>
+						<tr>
+							<td><input type="submit" value="提交并上传模型" name="next"  class="btn btn-success w-100"></td>
+						</tr>
+						<tr>
+							<td><input type="submit" value="仅提交" name="next"  class="btn btn-secondary w-100"></td>
+						</tr>
+						{{ massage }}
+					</thead>
+				</table>
+			</div>
+		</div>
+	</div>
+</form>
+{% endblock %}

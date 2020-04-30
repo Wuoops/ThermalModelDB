@@ -26,11 +26,11 @@ def searchDataP(sql,parameter):
     cursor.execute(sql % parameter)
     result=[]
 
-    print(parameter)
+    # print(parameter)
     for row in cursor.fetchall():
         # print(row)
         result.append(row)
-    print('共查找出', cursor.rowcount, '条数据')
+    # print('共查找出', cursor.rowcount, '条数据')
     closeConn(conn,cursor)
     return result
 # 查询数据

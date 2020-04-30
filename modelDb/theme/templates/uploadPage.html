@@ -1,0 +1,55 @@
+{% extends 'base.html' %}
+{% block content %}
+{% load static %}
+
+<div class="container" >
+	<table class="table table-hover table-striped text-center" >
+		<thead class="thead-light">
+			<tr>
+				<th>ID</th>
+				<th>模型名称</th>
+				<th>类型</th>
+				<th>创建人</th>
+				<th>创建时间</th>
+				<th>操作</th>
+			</tr>
+		</thead>
+		<tbody>
+			{% for col in  posts.object_list %}
+				<tr onclick="window.document.location = '/resupload?id={{col.0}}'">
+					<td>{{col.0}}</td>
+					<td>{{col.1}}</td>
+					<td>{{col.2}}</td>
+					<td>{{col.4}}</td>
+					<td>{{col.5}}</td>
+					<td onclick="event.stopPropagation()">
+						<button type="button" class="btn-sm btn-success" onclick="window.document.location = '/resupload?id={{col.0}}'">点击上传</button>
+					</td>
+				</tr>
+			{% endfor %}
+		</tbody>
+	</table>
+</div>
+
+<div class="container">
+	<div class="row">
+		<div class="col-8"></div>
+		<table class="table col-4 pull-right">
+			<tr>
+				<td>{% if posts.has_previous %}
+					<a  href="/upload/?page={{ posts.previous_page_number }}&type={{ type }}&name={{ name }}&source={{ source }}&creater={{ creater }}&fy={{ fy }}&fm={{ fm }}&fd={{ fd }}&ty={{ ty }}&tm={{ tm }}&td={{ td }}">上一页</a>
+					{% endif %}
+				</td>
+				<td><input class="form-control-ms text-center" style="width: 45px;" id="nowpage" name="page" value="{{ page }}"/>/<a name="pagemax" >{{ pagemax }}</a>
+				</td>
+				<td>
+					{% if posts.has_next %}
+					<a  href="/upload/?page={{ posts.next_page_number }}&type={{ type }}&name={{ name }}&source={{ source }}&creater={{ creater }}&fy={{ fy }}&fm={{ fm }}&fd={{ fd }}&ty={{ ty }}&tm={{ tm }}&td={{ td }}">下一页</a>
+					{% endif %}
+				</td>
+				<td><button class="btn btn-primary w-100" type="submit">跳转</button></td>
+			</tr>
+		</table>
+	</div>
+</div>
+{% endblock %}

@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from django.core.paginator import Paginator,Page,PageNotAnInteger,EmptyPage
 from DataManager.Models.models import *
-from Login.views import LoginView
+# from Login.views import LoginView
 import datetime
 from dao.uitlsPlus import Utils
 
@@ -41,6 +41,7 @@ def uploadPage(request):
     td = td if td != None else ''
 
     fdate = dateSplice(fy,fm,fd)
+
     # print(fdate)
     now = datetime.datetime.now()+ datetime.timedelta(days=1)
     tdate = now.strftime('%Y-%m-%d')

@@ -1,0 +1,146 @@
+{% extends 'base.html' %}
+{% block head %}
+{% load static %}
+<link rel="stylesheet" href="{% static 'css/zTreeStyle/zTreeStyle.css'%}" type="text/css">
+<script type="text/javascript" src="{% static 'js/jquery-1.4.4.min.js'%}"></script>
+<script type="text/javascript" src="{% static 'js/jquery.ztree.core.js'%}"></script>
+
+<SCRIPT type="text/javascript">
+	<!--
+	var curMenu = null, zTree_Menu = null;
+	var setting = {
+		view: {
+			showLine: true,
+			selectedMulti: false,
+			dblClickExpand: false
+		},
+		data: {
+			simpleData: {
+				enable: true
+			}
+		},
+		callback: {
+			onNodeCreated: this.onNodeCreated,
+			beforeClick: this.beforeClick,
+			onClick: this.onClick
+		}
+	};
+
+var zNodes =[
+{ id:1, pId:0, name:"CPU", open:true},
+{ id:11, pId:1, name:"品牌/系列", open:true},
+	{ id:111, pId:11, name:"INTEL", open:true},
+	{ id:1111, pId:111, name:"Broadwell", open:true},
+	{ id:11111, pId:1111, name:"Xeon", open:true},
+	{ id:111111, pId:11111, name:"E5", open:true},
+	{ id:111112, pId:11111, name:"E7", open:true},
+	{ id:1111122, pId:111112, name:"V3", open:true},
+	{ id:11111121, pId:1111122, name:"E7-3850", open:true},
+	{ id:1111121, pId:111112, name:"V4", open:true},
+	{ id:11111121, pId:1111121, name:"E7-4850", open:true},
+
+	{ id:12, pId:11, name:"AMD"},
+	{ id:121, pId:12, name:"叶子节点 1-2-1"},
+	{ id:122, pId:12, name:"叶子节点 1-2-2"},
+	{ id:123, pId:12, name:"叶子节点 1-2-3"},
+	{ id:124, pId:12, name:"叶子节点 1-2-4"},
+{ id:13, pId:1, name:"规格", open:true},
+	{ id:131, pId:13, name:"核心数"},
+	{ id:132, pId:13, name:"主频"},
+	{ id:133, pId:13, name:"睿频"},
+	{ id:134, pId:13, name:"制程"},
+	{ id:135, pId:13, name:"TDP"},
+	{ id:136, pId:13, name:"插槽类型"},
+	{ id:137, pId:13, name:"最大缓存"},
+	{ id:138, pId:13, name:"最大内存"},
+	{ id:139, pId:13, name:"内存类型"},
+	{ id:140, pId:13, name:"是否制程ECC内存"},
+	{ id:141, pId:13, name:"是否包含GPU"},
+
+	{ id:2, pId:0, name:"DIMM"},
+	{ id:21, pId:2, name:"子菜单 2-1"},
+	{ id:211, pId:21, name:"叶子节点 2-1-1"},
+	{ id:212, pId:21, name:"叶子节点 2-1-2"},
+	{ id:213, pId:21, name:"叶子节点 2-1-3"},
+	{ id:214, pId:21, name:"叶子节点 2-1-4"},
+	{ id:22, pId:2, name:"子菜单 2-2"},
+	{ id:221, pId:22, name:"叶子节点 2-2-1"},
+	{ id:222, pId:22, name:"叶子节点 2-2-2"},
+	{ id:223, pId:22, name:"叶子节点 2-2-3"},
+	{ id:224, pId:22, name:"叶子节点 2-2-4"},
+	{ id:3, pId:0, name:"DISK"},
+	{ id:31, pId:3, name:"子菜单 3-1"},
+	{ id:311, pId:31, name:"叶子节点 3-1-1"},
+	{ id:312, pId:31, name:"叶子节点 3-1-2"},
+	{ id:313, pId:31, name:"叶子节点 3-1-3"},
+	{ id:314, pId:31, name:"叶子节点 3-1-4"},
+	{ id:32, pId:3, name:"子菜单 3-2"},
+	{ id:321, pId:32, name:"叶子节点 3-2-1"},
+	{ id:322, pId:32, name:"叶子节点 3-2-2"},
+	{ id:323, pId:32, name:"叶子节点 3-2-3"},
+	{ id:324, pId:32, name:"叶子节点 3-2-4"}
+];
+
+	function beforeClick(treeId, node) {
+		if (node.isParent) {
+			if (node.level === 0) {
+				var pNode = curMenu;
+				while (pNode && pNode.level !==0) {
+					pNode = pNode.getParentNode();
+				}
+				if (pNode !== node) {
+					var a = $("#" + pNode.tId + "_a");
+					a.removeClass("cur");
+					zTree_Menu.expandNode(pNode, false);
+				}
+				a = $("#" + node.tId + "_a");
+				a.addClass("cur");
+
+				var isOpen = false;
+				for (var i=0,l=node.children.length; i<l; i++) {
+					if(node.children[i].open) {
+						isOpen = true;
+						break;
+					}
+				}
+				if (isOpen) {
+					zTree_Menu.expandNode(node, true);
+					curMenu = node;
+				} else {
+					zTree_Menu.expandNode(node.children[0].isParent?node.children[0]:node, true);
+					curMenu = node.children[0];
+				}
+			} else {
+				zTree_Menu.expandNode(node);
+			}
+		}
+		return !node.isParent;
+	}
+	function onClick(e, treeId, node) {
+		alert("Do what you want to do!");
+	}
+
+	$(document).ready(function(){
+		$.fn.zTree.init($("#treeDemo"), setting, zNodes);
+		zTree_Menu = $.fn.zTree.getZTreeObj("treeDemo");
+		curMenu = zTree_Menu.getNodes()[0].children[0].children[0];
+		zTree_Menu.selectNode(curMenu);
+		var a = $("#" + zTree_Menu.getNodes()[0].tId + "_a");
+		a.addClass("cur");
+	});
+	//-->
+</SCRIPT>
+<style type="text/css">
+.ztree li a.level0 {width:200px;height: 20px; text-align: center; display:block; background-color: #0B61A4; border:1px silver solid;}
+.ztree li a.level0.cur {background-color: #66A3D2; }
+.ztree li a.level0 span {display: block; color: white; padding-top:3px; font-size:12px; font-weight: bold;word-spacing: 2px;}
+.ztree li a.level0 span.button {	float:right; margin-left: 10px; visibility: visible;display:none;}
+.ztree li span.button.switch.level0 {display:none;}
+</style>
+{% endblock %}
+{% block content %}
+{% load static %}
+<div class="zTreeDemoBackground left">
+	<ul id="treeDemo" class="ztree"></ul>
+</div>
+{% endblock %}
