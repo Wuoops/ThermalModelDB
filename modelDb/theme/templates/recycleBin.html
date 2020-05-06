@@ -29,9 +29,7 @@
 					<td>{{col.9}}</td>
 					<td>{{col.8}}</td>
 					<td onclick="event.stopPropagation()">
-						<button type="button" class="btn-sm " onclick="window.document.location = '/resource?id={{col.0}}'" >附件列表</button>
-						<button type="button" class="btn-sm btn-info" onclick="window.document.location = '/updateMaterial?id={{col.0}}'" >修改</button>
-						<button type="button" class="btn-sm btn-danger" onclick="window.document.location = '/deleteMaterial?id={{col.0}}'" >删除</button>
+						<button type="button" class="btn-sm btn-success" onclick="window.document.location = '/rollback?id={{col.0}}'" >恢复</button>
 						{{ superbtn }}
 					</td>
 				</tr>

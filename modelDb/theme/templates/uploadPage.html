@@ -6,22 +6,28 @@
 	<table class="table table-hover table-striped text-center" >
 		<thead class="thead-light">
 			<tr>
-				<th>ID</th>
-				<th>模型名称</th>
 				<th>类型</th>
-				<th>创建人</th>
-				<th>创建时间</th>
+				<th>品牌</th>
+				<th>平台(Platform)</th>
+				<th>代号(Code)</th>
+				<th>模型名称</th>
+				<th>TDP</th>
+				<th>SPEC</th>
+				<th>创建日期</th>
 				<th>操作</th>
 			</tr>
 		</thead>
 		<tbody>
 			{% for col in  posts.object_list %}
 				<tr onclick="window.document.location = '/resupload?id={{col.0}}'">
-					<td>{{col.0}}</td>
+					<td>{{col.4}}</td>
 					<td>{{col.1}}</td>
 					<td>{{col.2}}</td>
-					<td>{{col.4}}</td>
+					<td>{{col.3}}</td>
 					<td>{{col.5}}</td>
+					<td>{{col.7}}</td>
+					<td>{{col.9}}</td>
+					<td>{{col.8}}</td>
 					<td onclick="event.stopPropagation()">
 						<button type="button" class="btn-sm btn-success" onclick="window.document.location = '/resupload?id={{col.0}}'">点击上传</button>
 					</td>

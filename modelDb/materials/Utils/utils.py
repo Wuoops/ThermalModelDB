@@ -1,5 +1,16 @@
 from dao.daoUtils import *
 from dao.uitlsPlus import *
+import re
+from django.shortcuts import render,redirect
+
+
+# 判断一个字符串是否是小数
+def IsFloat(s):
+    pattern = '^-?\d+\.?\d*$'
+    match = re.match(pattern, s)
+    return match != None
+
+
 #初始查询列表返一个列表
 def model_search():
     # 查询数据
@@ -12,7 +23,7 @@ def model_search():
              ( SELECT u.owner_name FROM d_users u WHERE u.user_id = m.creater ) usr,
              (case when tdp is null then '-' else tdp end) tdp,
               DATE_FORMAT(m.create_date,'%Y-%m-%d') createdate,
-           (case when spec is null then '-' else tdp end) spec
+           (case when spec is null then '-' else spec end) spec
 
                 FROM d_materials AS m
                 INNER JOIN d_users AS S
@@ -120,19 +131,19 @@ def insertOther(request,userId):
         sql = "insert into d_materials (type,brand,name,creater) values (%s,%s,%s,%s);"
         par = [type,brand,name,userId]
     elif (tdp != '') & (spec == ''):
-        if tdp.isdigit():
+        if IsFloat(tdp):
             sql = "insert into d_materials (type,brand,name,creater,tdp) values (%s,%s,%s,%s,%s);"
             par = [type,brand,name,userId,tdp]
         else:
             return 'tdp'
     elif (tdp =='') & (spec !=''):
-        if spec.isdigit():
+        if IsFloat(spec):
             sql = "insert into d_materials (type,brand,name,creater,spec) values (%s,%s,%s,%s,%s);"
             par = [type,brand,name,userId,spec]
         else:
             return 'spec'
     elif (tdp != '') & (spec !=''):
-        if spec.isdigit() & tdp.isdigit():
+        if IsFloat(spec) & IsFloat(tdp):
             sql = "insert into d_materials (type,brand,name,creater,spec,tdp) values (%s,%s,%s,%s,%s,%s);"
             par = [type,brand,name,userId,spec,tdp]
         else:
@@ -142,7 +153,45 @@ def insertOther(request,userId):
     rid = up.create(sql,par)
     up.commit()
     up.close()
-    return 0
+    return rid
+
+#将其他元器件数据插入物料表
+def updateOther(request,userId):
+    id = request.GET.get('id')
+    type = request.POST.get('type')
+    brand= request.POST.get('brand')
+    name = request.POST.get('name')
+    tdp = request.POST.get('TDP')
+    spec = request.POST.get('SPEC')
+
+
+    if (tdp == '') & (spec == ''):
+        sql = "update d_materials set type = %s ,brand = %s,name = %s,creater = %s where id = %s"
+        par = [type,brand,name,userId,id]
+    elif (tdp != '') & (spec == ''):
+        if IsFloat(tdp):
+            sql = "update d_materials set type = %s ,brand = %s,name = %s,creater = %s ,tdp = %s where id = %s"
+            par = [type,brand,name,userId,tdp,id]
+        else:
+            return 'tdp'
+    elif (tdp =='') & (spec !=''):
+        if IsFloat(spec):
+            sql = "update d_materials set type = %s ,brand = %s,name = %s,creater = %s,spec=%s where id = %s"
+            par = [type,brand,name,userId,spec,id]
+        else:
+            return 'spec'
+    elif (tdp != '') & (spec !=''):
+        if IsFloat(spec) & IsFloat(tdp):
+            sql = "update d_materials set type = %s ,brand = %s,name = %s,creater = %s,tdp=%s,spec=%s where id = %s"
+            par = [type,brand,name,userId,spec,tdp,id]
+        else:
+            return -1
+
+    up = Utils()
+    rid = up.create(sql,par)
+    up.commit()
+    up.close()
+    return rid
 
 #将CPU数据插入物料表
 def insertCpuTomaterial(request,userId):
@@ -158,19 +207,19 @@ def insertCpuTomaterial(request,userId):
         sql = "insert into d_materials (type,brand,name,platform,code,creater) values (%s,%s,%s,%s,%s,%s);"
         par = [type,brand,name,platform,code,userId]
     elif (tdp != '') & (spec == ''):
-        if tdp.isdigit():
+        if IsFloat(tdp):
             sql = "insert into d_materials (type,brand,name,platform,code,creater,tdp) values (%s,%s,%s,%s,%s,%s,%s);"
             par = [type,brand,name,platform,code,userId,tdp]
         else:
             return 'tdp'
     elif (tdp =='') & (spec !=''):
-        if spec.isdigit():
+        if IsFloat(spec):
             sql = "insert into d_materials (type,brand,name,platform,code,creater,spec) values (%s,%s,%s,%s,%s,%s,%s);"
             par = [type,brand,name,platform,code,userId,spec]
         else:
             return 'spec'
     elif (tdp != '') & (spec !=''):
-        if spec.isdigit() & tdp.isdigit():
+        if IsFloat(spec) & IsFloat(tdp):
             sql = "insert into d_materials (type,brand,name,platform,code,creater,tdp,spec) values (%s,%s,%s,%s,%s,%s,%s,%s);"
             par = [type,brand,name,platform,code,userId,tdp,spec]
         else:
@@ -181,14 +230,56 @@ def insertCpuTomaterial(request,userId):
     up.commit()
     up.close()
 
-    return 0
+    return rid
+
+
+#将CPU数据提交更改
+def updateCpuTomaterial(request,userId):
+    id = request.GET.get('id')
+    type = str(request.POST.get('type'))
+    brand= str(request.POST.get('brand'))
+    name = str(request.POST.get('name'))
+    platform = str(request.POST.get('platform'))
+    code = str(request.POST.get('code'))
+    tdp = request.POST.get('TDP')
+    spec = request.POST.get('SPEC')
+
+    if (tdp == '') & (spec == ''):
+        sql = "update d_materials set type = %s ,brand = %s,name = %s,platform = %s,code = %s,creater = %s where id = %s"
+        par = [type,brand,name,platform,code,userId,id]
+    elif (tdp != '') & (spec == ''):
+        if IsFloat(tdp):
+            sql = "update d_materials set type = %s ,brand = %s,name = %s,platform = %s,code = %s,creater = %s ,tdp = %s where id = %s"
+            par = [type,brand,name,platform,code,userId,tdp,id]
+        else:
+            return 'tdp'
+    elif (tdp =='') & (spec !=''):
+        if IsFloat(spec):
+            sql = "update d_materials set type = %s ,brand = %s,name = %s,platform = %s,code = %s,creater = %s  ,spec = %s where id = %s"
+            par = [type,brand,name,platform,code,userId,spec,id]
+        else:
+            return 'spec'
+    elif (tdp != '') & (spec !=''):
+        if IsFloat(spec) & IsFloat(tdp):
+            sql = "update d_materials set type = %s ,brand = %s,name = %s,platform = %s,code = %s,creater = %s ,tdp = %s ,spec = %s where id = %s"
+            par = [type,brand,name,platform,code,userId,tdp,spec,id]
+        else:
+            return -1
+
+    up = Utils()
+    rid = up.create(sql,par)
+    up.commit()
+    up.close()
+
+    return rid
+
+
 #根据物料ID查询物料信息
 def getMaterTags(mid):
     sql = 'select * from d_materials_tag where materid = %s'
     mid=[mid,]
     u = Utils()
     data = u.searchListP(sql,mid)
-
     return data
 
 #根据id查询物料信息
@@ -207,7 +298,7 @@ def getMaterByid(mid):
                 m.create_date,
                 '%%Y-%%m-%%d %%H:%%i:%%s'
             )  create_time    
-                 ,platform,code,brand
+                 ,platform,code,brand,type,tdp,spec
                 FROM
             d_materials AS m
         INNER JOIN d_users AS S
@@ -233,6 +324,7 @@ def getPlatformList():
     up.commit()
     up.close()
     platformList=[]
+    platformList.append('--')
     for i in pList:
         platformList.append(i[0])
     return platformList
@@ -243,6 +335,28 @@ def getCodeList():
     up.commit()
     up.close()
     codeList=[]
+
+    codeList.append('--')
     for i in cList:
         codeList.append(i[0])
     return codeList
+
+#排序置顶
+def listpTotop(topValue,theList):
+    td=[]
+    td.append(topValue)
+    for i in theList:
+        if i != topValue:
+            td.append(i)
+
+    return td
+
+
+#移动至回收站
+def movoToRecyclebin(id):
+    sql = "update d_materials set iswork = 0 where id = %s"
+
+    up = Utils()
+    rid = up.create(sql,id)
+    up.commit()
+    up.close()
