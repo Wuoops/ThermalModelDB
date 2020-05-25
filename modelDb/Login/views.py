@@ -1,6 +1,7 @@
 from django.shortcuts import render,redirect
 
-from django.contrib.auth import authenticate, login
+from django.contrib.auth import authenticate, login,logout
+from django.contrib.auth.decorators import login_required
 
 def login_view(request):
 
@@ -19,3 +20,8 @@ def login_view(request):
             return render(request,'login.html')
     else:
         return render(request,'login.html')
+
+@login_required
+def logoutfunction(request):
+    logout(request)
+    return redirect('/materials')

@@ -1,0 +1,161 @@
+{% extends 'base.html' %}
+
+{% block head %}
+{% load static %}
+<script src="{% static  'bootstrap/js/bootstrap-colorpicker.min.js' %}"></script>
+<link href="{% static  'bootstrap/css/bootstrap-colorpicker.min.css' %}" rel="stylesheet">
+{% endblock %}
+
+{% block content %}
+<div class="card container" style="margin-top : 10px">
+    <div class="row">
+        <div class="col-4">
+            <div class="card-body" style="margin:10px;">
+            <h5 class="card-title">版本分支设置</h5>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+<!--        原始数据,提交修改-->
+        <div class="col-6 ">
+            <form method="post" action="/updateBranch">
+                <table class="table container text-center">
+                    <tr class="text-center row bg-secondary">
+                        <th class="col-2">分支号</th>
+                        <th class="col">分支名称</th>
+                        <th class="col">颜色</th>
+                    </tr>
+                    {% for list in branchList %}
+                    <tr class="row">
+                        <th class="col-2">{{ list.0 }}</th>
+                        <td class="col"><input class="form-control" name="{{ list.0 }}_name" value="{{ list.1 }}"></td>
+                        <td>
+                          <input type="text" class="form-control" id="colorpick_{{ list.0 }}"  placeholder="#000000" name="{{ list.0 }}_color" value="{{ list.2 }}">
+                        </td>
+                    </tr>
+                    {% endfor%}
+                    <tr style="display:none"><td><input name="id" value="{{ mid }}"></td></tr>
+                    <tr><td colspan="2"><button class="btn w-100" type="submit">提交修改</button></td></tr>
+                </table>
+            </form>
+        </div>
+<!--        新增数据-->
+        <div class="col-6">
+        <form method="post" action="/createBranch">
+            <table id="table" class="table container text-center">
+                    <tr class="text-center row bg-info">
+                        <th class="col-2">分支号</th>
+                        <th class="col">分支名称</th>
+                        <th class="col">颜色</th>
+                    </tr>
+                <tr class="text-center row">
+                    <td class="col-2"><input class="form-control" name="inputId0" autocomplete="off"></td>
+                    <td class="col"><input class="form-control" name="inputName0" autocomplete="off"></td>
+                    <td class="col">
+                            <input type="text" class="form-control" id="colorpick_0" placeholder="#000000" name="inputColor0" autocomplete="off">
+                    </td>
+                </tr>
+            </table>
+
+
+            <table class="table"style="width:200px" >
+                <tr style="display:none"><td><input name="id" value="{{ mid }}"></td></tr>
+                <tr>
+                    <td><button class="btn w-100"type="button" onclick="addOne()">新增一条</button></td>
+                    <td><button class="btn w-100" type="button" onclick="delOne()">删除一行</button></td>
+                    <td><button class="btn w-100" type="submit">提交</button></td>
+                </tr>
+            </table>
+        </form>
+        </div>
+    </div>
+</div>
+
+
+<script>
+    var num=1
+    function addOne(){
+        console.log('addone')
+        var table = document.getElementById('table');
+        var tr = document.createElement("tr");
+        var tdId = document.createElement("td");
+        var tdName = document.createElement("td");
+        var tdColor = document.createElement("td");
+
+
+        var inputId = document.createElement("input");
+        var inputName = document.createElement("input");
+        var inputColor = document.createElement("input");
+
+        inputId.setAttribute("name","inputId"+num);
+        inputName.setAttribute("name","inputName"+num);
+        inputColor.setAttribute("name","inputColor"+num);
+
+        tr.setAttribute("class","row text-center");
+
+        tdId.setAttribute("class","col-2");
+        tdName.setAttribute("class","col");
+        tdColor.setAttribute("class","col");
+
+
+        inputId.setAttribute("class","form-control ");
+        inputName.setAttribute("class","form-control ");
+        inputColor.setAttribute("class","form-control ");
+        inputColor.setAttribute("id","colorpick_"+num);
+        inputColor.setAttribute("placeholder","#000000" );
+        inputColor.setAttribute("type","text" );
+
+
+        tr.setAttribute("name","tr"+num);
+        tr.setAttribute("id","tr"+num);
+
+
+
+        table.appendChild(tr);
+        tr.appendChild(tdId);
+        tr.appendChild(tdName);
+        tr.appendChild(tdColor);
+        tdId.appendChild(inputId);
+        tdName.appendChild(inputName);
+        tdColor.appendChild(inputColor);
+
+        num=num+1
+        $(function() {
+            $("input[id^='colorpick_']").colorpicker({
+                    allowEmpty:true,//允许为空,显示清楚颜色按钮
+                    showInput: true,//显示输入
+                    containerClassName: "full-spectrum",
+                    showInitial: true,//显示初始颜色,提供现在选择的颜色和初始颜色对比
+                    showPalette: true,//显示选择器面板
+                    showSelectionPalette: true,//记住选择过的颜色
+                    showAlpha: true,//显示透明度选择
+                    maxPaletteSize: 7,//记住选择过的颜色的最大数量
+                    preferredFormat: "hex"//输入框颜色格式,(hex十六进制,hex3十六进制可以的话只显示3位,hsl,rgb三原
+            });
+        });
+    }
+
+    function delOne(){
+        num--;
+        var table = document.getElementById('table');
+        var tr = document.getElementById('tr'+num);
+        table.removeChild(tr);
+    }
+</script>
+
+<script>
+$(function() {
+    $("input[id^='colorpick_']").colorpicker({
+            allowEmpty:true,//允许为空,显示清楚颜色按钮
+            showInput: true,//显示输入
+            containerClassName: "full-spectrum",
+            showInitial: true,//显示初始颜色,提供现在选择的颜色和初始颜色对比
+            showPalette: true,//显示选择器面板
+            showSelectionPalette: true,//记住选择过的颜色
+            showAlpha: true,//显示透明度选择
+            maxPaletteSize: 7,//记住选择过的颜色的最大数量
+            preferredFormat: "hex"//输入框颜色格式,(hex十六进制,hex3十六进制可以的话只显示3位,hsl,rgb三原
+    });
+});
+</script>
+{% endblock %}

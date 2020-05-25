@@ -25,8 +25,6 @@ def searchDataP(sql,parameter):
     conn,cursor = connDB()
     cursor.execute(sql % parameter)
     result=[]
-
-    # print(parameter)
     for row in cursor.fetchall():
         # print(row)
         result.append(row)
@@ -39,9 +37,8 @@ def searchData(sql):
     cursor.execute(sql)
     result=[]
     for row in cursor.fetchall():
-        # print(row)
         result.append(row)
-    print('共查找出', cursor.rowcount, '条数据')
+    # print('共查找出', cursor.rowcount, '条数据')
     closeConn(conn,cursor)
     return result
 #查询一条

@@ -1,64 +1,39 @@
-{% extends 'base.html' %}
-{% block content %}
+{% extends 'materials.html' %}
+{% block mater %}
 {% load static %}
+<td class="col-2" onclick="event.stopPropagation()">
+	<button type="button" class="btn-sm btn-success" onclick="window.document.location = '/rollback?id={{col.0}}'" >恢复</button>
+	{{ superbtn }}
+</td>
 
-<div class="container" >
-	<table class="table table-hover table-striped text-center" >
-		<thead class="thead-light">
-			<tr>
-				<th>类型</th>
-				<th>品牌</th>
-				<th>平台(Platform)</th>
-				<th>代号(Code)</th>
-				<th>模型名称</th>
-				<th>TDP</th>
-				<th>SPEC</th>
-				<th>创建日期</th>
-				<th>操作</th>
-			</tr>
-		</thead>
-		<tbody>
-			{% for col in  posts.object_list %}
-				<tr >
-					<td>{{col.4}}</td>
-					<td>{{col.1}}</td>
-					<td>{{col.2}}</td>
-					<td>{{col.3}}</td>
-					<td>{{col.5}}</td>
-					<td>{{col.7}}</td>
-					<td>{{col.9}}</td>
-					<td>{{col.8}}</td>
-					<td onclick="event.stopPropagation()">
-						<button type="button" class="btn-sm btn-success" onclick="window.document.location = '/rollback?id={{col.0}}'" >恢复</button>
-						{{ superbtn }}
-					</td>
-				</tr>
-			{% endfor %}
-		</tbody>
+{% endblock %}
 
-	</table>
-</div>
-<div class="container">
-	<div class="row">
-	<div class="col-8"></div>
-	<table class="table col-4 pull-right">
-		<tr>
-			<td>{% if posts.has_previous %}
-				<a  href="/materials/?page={{ posts.previous_page_number }}&type={{ type }}&name={{ name }}&source={{ source }}&creater={{ creater }}&fy={{ fy }}&fm={{ fm }}&fd={{ fd }}&ty={{ ty }}&tm={{ tm }}&td={{ td }}">上一页</a>
-				{% endif %}
-			</td>
-			<td><input class="form-control-ms text-center" style="width: 45px;" id="nowpage" name="page" value="{{ page }}"/>
-			 /<a name="pagemax" >{{ pagemax }}</a>
-			</td>
-			<td>
-				{% if posts.has_next %}
-				<a  href="/materials/?page={{ posts.next_page_number }}&type={{ type }}&name={{ name }}&source={{ source }}&creater={{ creater }}&fy={{ fy }}&fm={{ fm }}&fd={{ fd }}&ty={{ ty }}&tm={{ tm }}&td={{ td }}">下一页</a>
-				{% endif %}
-			</td>
-			<td><button class="btn btn-primary w-100" type="submit">跳转</button></td>
-		</tr>
-	</table>
 
-	</div>
-</div>
+{% block page %}
+<td>{% if posts.has_previous %}
+	<a  href="/recyclebin/?page={{ posts.previous_page_number }}">上一页</a>
+	{% endif %}
+</td>
+<td><input class="form-control-ms text-center" style="width: 45px;" id="nowpage" name="page" value="{{ page }}"/>
+ /<a name="pagemax" >{{ pagemax }}</a>
+</td>
+<td>
+	{% if posts.has_next %}
+	<a  href="/recyclebin/?page={{ posts.next_page_number }}">下一页</a>
+	{% endif %}
+</td>
+{% endblock %}
+
+{% block script %}
+<script type="text/JavaScript">
+function jumpToPage(){
+	var page = document.getElementById('nowpage').value;
+	console.log(page)
+	window.location.href="/recyclebin/?page="+page;
+};
+
+function selected(data){
+	window.location.href="/recyclebin?"+data.name+"="+data.value;
+}
+</script>
 {% endblock %}

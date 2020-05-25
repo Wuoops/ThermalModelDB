@@ -5,10 +5,10 @@
 		<div class="row">
 			<div class="col-6">
 				<table class="table table-hover table-striped text-center" >
-					<thead class="thead-light">
-						<tr>
-							<th>类型<span class="text-danger">&nbsp*</span></th>
-							<td>
+					<thead class="thead-light container">
+						<tr class="row">
+							<th class="col-6">类型<span class="text-danger">&nbsp*</span></th>
+							<td class="col-6">
 								<select name="type" class="form-control text-center w-100" style="width:  200px">
 									{% for type in typeData %}
 										<option  >{{ type }}</option>
@@ -16,33 +16,40 @@
 								</select>
 							</td>
 						</tr>
-						<tr>
-							<th>品牌<span class="text-danger">&nbsp*</span></th>
-							<td>
+						<tr class="row">
+							<th class="col-6">品牌<span class="text-danger">&nbsp*</span></th>
+							<td class="col-6">
 								<input class="form-control"  name="brand"  value={{ brand }} >
 							</td>
 						</tr>
-						<tr>
-							<th>型号<span class="text-danger">&nbsp*</span></th>
-							<td>
+						<tr class="row">
+							<th class="col-6">型号<span class="text-danger">&nbsp*</span></th>
+							<td class="col-6">
 								<input class="form-control"  name="name" value={{ name }} >
 							</td>
 						</tr>
-						<tr>
-							<th>TDP</th>
-							<td>
+						<tr class="row">
+							<th class="col-6">TDP(Watte)</th>
+							<td class="col-6">
 								<input class="form-control"  name="TDP" value={{ TDP }} >
 							</td>
 						</tr>
-						<tr>
-							<th>SPEC</th>
-							<td>
-								<input class="form-control"  name="SPEC" value={{ SPEC }} >
+						<tr class="row">
+							<th class="col-6">SPEC(℃)</th>
+							<td  class="col-3">
+								<input class=" form-control"  name="SPEC" value={{ SPEC }} >
+
+							</td>
+							<td class="col-3">
+								<select class=" form-control " name="temptype" class=" text-center" style="width:  110px">
+										<option >Tjunction</option>
+										<option >Tcase</option>
+								</select>
 							</td>
 						</tr>
-						<tr>
-							<th>平台(CPU Only<span class="text-danger">&nbsp*</span>)</th>
-							<td>
+						<tr class="row">
+							<th class="col-6">平台(CPU Only<span class="text-danger">&nbsp*</span>)</th>
+							<td class="col-6">
 								<select name="platform" class="form-control text-center w-100" style="width:  200px">
 									{% for platform in platformList %}
 										<option  >{{ platform }}</option>
@@ -50,10 +57,10 @@
 								</select>
 							</td>
 						</tr>
-						<tr>
-							<th>代号(CPU Only<span class="text-danger">&nbsp*</span>)</th>
-							<td>
-								<select name="platform" class="form-control text-center w-100" style="width:  200px">
+						<tr class="row">
+							<th class="col-6">代号(CPU Only<span class="text-danger">&nbsp*</span>)</th>
+							<td class="col-6">
+								<select name="code" class="form-control text-center w-100" style="width:  200px">
 									{% for code in codeList %}
 										<option  >{{ code }}</option>
 									{% endfor %}
@@ -63,18 +70,15 @@
 					</thead>
 				</table>
 			</div>
+
 			<div class="col-6">
-							<table class="table table-hover table-striped text-center" >
+				<table class="table table-hover table-striped text-center" >
 					<thead class="thead-light">
-						<tr>
-							<td><input type="submit" value="提交并完善详细信息" name="next"  class="btn btn-info w-100"></td>
-						</tr>
+
 						<tr>
 							<td><input type="submit" value="提交并上传模型" name="next"  class="btn btn-success w-100"></td>
 						</tr>
-						<tr>
-							<td><input type="submit" value="仅提交" name="next"  class="btn btn-secondary w-100"></td>
-						</tr>
+							{% block sub %}{% endblock %}
 						{{ massage }}
 					</thead>
 				</table>
@@ -82,4 +86,18 @@
 		</div>
 	</div>
 </form>
+<script>
+$('.custom-file-input').on('change', function() {
+	let fileName = $(this).val().split('\\').pop();
+	$(this).next('.custom-file-label').addClass("selected").html(fileName);
+});
+
+$('#cover').on('change', function() {
+	let fileName = $(this).val();
+	console.log(fileName);
+
+});
+
+
+</script>
 {% endblock %}

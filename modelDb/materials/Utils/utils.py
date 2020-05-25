@@ -2,7 +2,7 @@ from dao.daoUtils import *
 from dao.uitlsPlus import *
 import re
 from django.shortcuts import render,redirect
-
+from config import Config
 
 # 判断一个字符串是否是小数
 def IsFloat(s):
@@ -12,32 +12,20 @@ def IsFloat(s):
 
 
 #初始查询列表返一个列表
-def model_search():
+def model_search(queryDict):
     # 查询数据
-    sql = """
-        select id ,
-            (case when brand is null then '-' else brand end) brand,
-            (case when platform is null then '-' else platform end) plat,
-            (case when code is null then '-' else code end) co ,type, 
-            (case when name is null then '-' else name end) name,
-             ( SELECT u.owner_name FROM d_users u WHERE u.user_id = m.creater ) usr,
-             (case when tdp is null then '-' else tdp end) tdp,
-              DATE_FORMAT(m.create_date,'%Y-%m-%d') createdate,
-           (case when spec is null then '-' else spec end) spec
-
-                FROM d_materials AS m
-                INNER JOIN d_users AS S
-                where m.creater = S.user_id
-                    AND m.iswork = '1'
-                     order by id desc;
-        """
-
-    # data = ('OFFICIAL','CPU')
-    # res = searchData(sql,data)
-
-    res = searchData(sql)
-    return res
-
+    if queryDict == {} :
+        sql =  " SELECT * FROM v_materials"
+        res = searchData(sql)
+        return res
+    else :
+        for k ,v in  queryDict.items():
+            if k != 'page':
+                sql = 'select * from v_materials where '+str(k)+' = ' +"'%s'" %v
+            else:
+                sql =  " SELECT * FROM v_materials"
+            res = searchData(sql)
+            return res
 #日期拼接
 def dateSplice(y,m,d):
     # print(d)
@@ -109,14 +97,14 @@ def pagination(list):
 
     return lst
 
-#获取Type表数据
-def getTypeData():
-    sql ="select * from m_type"
+def getMaterList(name):
+    sql ="select distinct "+str(name)+" from v_materials"
     data = searchData(sql)
     list = []
     for i in data:
-        list.append(i[1])
+        list.append(i[0])
     return list
+
 
 #将其他元器件数据插入物料表
 def insertOther(request,userId):
@@ -125,27 +113,28 @@ def insertOther(request,userId):
     name = request.POST.get('name')
     tdp = request.POST.get('TDP')
     spec = request.POST.get('SPEC')
+    temptype = request.POST.get('temptype')
 
 
     if (tdp == '') & (spec == ''):
-        sql = "insert into d_materials (type,brand,name,creater) values (%s,%s,%s,%s);"
-        par = [type,brand,name,userId]
+        sql = "insert into d_materials (type,brand,name,creater,temptype) values (%s,%s,%s,%s,%s);"
+        par = [type,brand,name,userId,temptype]
     elif (tdp != '') & (spec == ''):
         if IsFloat(tdp):
-            sql = "insert into d_materials (type,brand,name,creater,tdp) values (%s,%s,%s,%s,%s);"
-            par = [type,brand,name,userId,tdp]
+            sql = "insert into d_materials (type,brand,name,creater,tdp,temptype) values (%s,%s,%s,%s,%s,%s);"
+            par = [type,brand,name,userId,tdp,temptype]
         else:
             return 'tdp'
     elif (tdp =='') & (spec !=''):
         if IsFloat(spec):
-            sql = "insert into d_materials (type,brand,name,creater,spec) values (%s,%s,%s,%s,%s);"
-            par = [type,brand,name,userId,spec]
+            sql = "insert into d_materials (type,brand,name,creater,spec,temptype) values (%s,%s,%s,%s,%s,%s);"
+            par = [type,brand,name,userId,spec,temptype]
         else:
             return 'spec'
     elif (tdp != '') & (spec !=''):
         if IsFloat(spec) & IsFloat(tdp):
-            sql = "insert into d_materials (type,brand,name,creater,spec,tdp) values (%s,%s,%s,%s,%s,%s);"
-            par = [type,brand,name,userId,spec,tdp]
+            sql = "insert into d_materials (type,brand,name,creater,spec,temptype,tdp) values (%s,%s,%s,%s,%s,%s,%s);"
+            par = [type,brand,name,userId,spec,temptype,tdp]
         else:
             return -1
 
@@ -163,27 +152,28 @@ def updateOther(request,userId):
     name = request.POST.get('name')
     tdp = request.POST.get('TDP')
     spec = request.POST.get('SPEC')
+    temptype = request.POST.get('temptype')
 
 
     if (tdp == '') & (spec == ''):
-        sql = "update d_materials set type = %s ,brand = %s,name = %s,creater = %s where id = %s"
-        par = [type,brand,name,userId,id]
+        sql = "update d_materials set type = %s ,brand = %s,name = %s,creater = %s ,temptype = %s where id = %s"
+        par = [type,brand,name,userId,temptype,id]
     elif (tdp != '') & (spec == ''):
         if IsFloat(tdp):
-            sql = "update d_materials set type = %s ,brand = %s,name = %s,creater = %s ,tdp = %s where id = %s"
-            par = [type,brand,name,userId,tdp,id]
+            sql = "update d_materials set type = %s ,brand = %s,name = %s,creater = %s ,tdp = %s,temptype= %s  where id = %s"
+            par = [type,brand,name,userId,tdp,temptype,id]
         else:
             return 'tdp'
     elif (tdp =='') & (spec !=''):
         if IsFloat(spec):
-            sql = "update d_materials set type = %s ,brand = %s,name = %s,creater = %s,spec=%s where id = %s"
-            par = [type,brand,name,userId,spec,id]
+            sql = "update d_materials set type = %s ,brand = %s,name = %s,creater = %s,spec=%s ,temptype = %s where id = %s"
+            par = [type,brand,name,userId,spec,temptype,id]
         else:
             return 'spec'
     elif (tdp != '') & (spec !=''):
         if IsFloat(spec) & IsFloat(tdp):
-            sql = "update d_materials set type = %s ,brand = %s,name = %s,creater = %s,tdp=%s,spec=%s where id = %s"
-            par = [type,brand,name,userId,spec,tdp,id]
+            sql = "update d_materials set type = %s ,brand = %s,name = %s,creater = %s,tdp=%s,spec=%s ,temptype=%s  where id = %s"
+            par = [type,brand,name,userId,tdp,spec,temptype,id]
         else:
             return -1
 
@@ -202,26 +192,27 @@ def insertCpuTomaterial(request,userId):
     code = str(request.POST.get('code'))
     tdp = request.POST.get('TDP')
     spec = request.POST.get('SPEC')
+    temptype = request.POST.get('temptype')
 
     if (tdp == '') & (spec == ''):
-        sql = "insert into d_materials (type,brand,name,platform,code,creater) values (%s,%s,%s,%s,%s,%s);"
-        par = [type,brand,name,platform,code,userId]
+        sql = "insert into d_materials (type,brand,name,platform,code,creater,temptype) values (%s,%s,%s,%s,%s,%s,%s);"
+        par = [type,brand,name,platform,code,userId,temptype]
     elif (tdp != '') & (spec == ''):
         if IsFloat(tdp):
-            sql = "insert into d_materials (type,brand,name,platform,code,creater,tdp) values (%s,%s,%s,%s,%s,%s,%s);"
-            par = [type,brand,name,platform,code,userId,tdp]
+            sql = "insert into d_materials (type,brand,name,platform,code,creater,tdp,temptype) values (%s,%s,%s,%s,%s,%s,%s,%s);"
+            par = [type,brand,name,platform,code,userId,tdp,temptype]
         else:
             return 'tdp'
     elif (tdp =='') & (spec !=''):
         if IsFloat(spec):
-            sql = "insert into d_materials (type,brand,name,platform,code,creater,spec) values (%s,%s,%s,%s,%s,%s,%s);"
-            par = [type,brand,name,platform,code,userId,spec]
+            sql = "insert into d_materials (type,brand,name,platform,code,creater,spec,temptype) values (%s,%s,%s,%s,%s,%s,%s,%s);"
+            par = [type,brand,name,platform,code,userId,spec,temptype]
         else:
             return 'spec'
     elif (tdp != '') & (spec !=''):
         if IsFloat(spec) & IsFloat(tdp):
-            sql = "insert into d_materials (type,brand,name,platform,code,creater,tdp,spec) values (%s,%s,%s,%s,%s,%s,%s,%s);"
-            par = [type,brand,name,platform,code,userId,tdp,spec]
+            sql = "insert into d_materials (type,brand,name,platform,code,creater,tdp,spec,temptype) values (%s,%s,%s,%s,%s,%s,%s,%s,%s);"
+            par = [type,brand,name,platform,code,userId,tdp,spec,temptype]
         else:
             return -1
 
@@ -243,26 +234,27 @@ def updateCpuTomaterial(request,userId):
     code = str(request.POST.get('code'))
     tdp = request.POST.get('TDP')
     spec = request.POST.get('SPEC')
+    temptype = request.POST.get('temptype')
 
     if (tdp == '') & (spec == ''):
-        sql = "update d_materials set type = %s ,brand = %s,name = %s,platform = %s,code = %s,creater = %s where id = %s"
-        par = [type,brand,name,platform,code,userId,id]
+        sql = "update d_materials set type = %s ,brand = %s,name = %s,platform = %s,code = %s,creater = %s ,temptype = %s where id = %s"
+        par = [type,brand,name,platform,code,userId,temptype,id]
     elif (tdp != '') & (spec == ''):
         if IsFloat(tdp):
-            sql = "update d_materials set type = %s ,brand = %s,name = %s,platform = %s,code = %s,creater = %s ,tdp = %s where id = %s"
-            par = [type,brand,name,platform,code,userId,tdp,id]
+            sql = "update d_materials set type = %s ,brand = %s,name = %s,platform = %s,code = %s,creater = %s ,tdp = %s,temptype=%s where id = %s"
+            par = [type,brand,name,platform,code,userId,tdp,temptype,id]
         else:
             return 'tdp'
     elif (tdp =='') & (spec !=''):
         if IsFloat(spec):
-            sql = "update d_materials set type = %s ,brand = %s,name = %s,platform = %s,code = %s,creater = %s  ,spec = %s where id = %s"
-            par = [type,brand,name,platform,code,userId,spec,id]
+            sql = "update d_materials set type = %s ,brand = %s,name = %s,platform = %s,code = %s,creater = %s  ,spec = %s,temptype=%s where id = %s"
+            par = [type,brand,name,platform,code,userId,spec,temptype,id]
         else:
             return 'spec'
     elif (tdp != '') & (spec !=''):
         if IsFloat(spec) & IsFloat(tdp):
-            sql = "update d_materials set type = %s ,brand = %s,name = %s,platform = %s,code = %s,creater = %s ,tdp = %s ,spec = %s where id = %s"
-            par = [type,brand,name,platform,code,userId,tdp,spec,id]
+            sql = "update d_materials set type = %s ,brand = %s,name = %s,platform = %s,code = %s,creater = %s ,tdp = %s ,spec = %s ,temptype = %s where id = %s"
+            par = [type,brand,name,platform,code,userId,tdp,spec,temptype,id]
         else:
             return -1
 
@@ -298,7 +290,7 @@ def getMaterByid(mid):
                 m.create_date,
                 '%%Y-%%m-%%d %%H:%%i:%%s'
             )  create_time    
-                 ,platform,code,brand,type,tdp,spec
+                 ,platform,code,brand,type,tdp,spec,temptype
                 FROM
             d_materials AS m
         INNER JOIN d_users AS S
@@ -308,7 +300,14 @@ def getMaterByid(mid):
     """
 
     data = searchDataP(sql,mid)
-    return (data[0])
+    # print(data)
+    dList=[]
+    for d in data[0]:
+        if d is None:
+            dList.append('-')
+        else:
+            dList.append(d)
+    return (dList)
 
 #合并两个list为一个Dict
 def listsTodict(kList,vList):
@@ -360,3 +359,14 @@ def movoToRecyclebin(id):
     rid = up.create(sql,id)
     up.commit()
     up.close()
+
+
+def getCover(mid):
+    daoPlus = Utils()
+    sql = 'select cover from d_materials where id = %s'
+    args = [mid,]
+    cover = daoPlus.searchListP(sql,args)[0][0]
+    daoPlus.close()
+    picAddr=Config.picAddr+str(cover)
+
+    return picAddr,cover

@@ -2,51 +2,79 @@
 {% block content %}
 {% load static %}
 
-<div class="container" >
-	<table class="table table-hover table-striped text-center" >
-		<thead class="thead-light">
-			<tr>
-				<th>类型</th>
-				<th>品牌</th>
-				<th>平台(Platform)</th>
-				<th>代号(Code)</th>
-				<th>模型名称</th>
-				<th>TDP</th>
-				<th>SPEC</th>
-				<th>创建日期</th>
-				<th>操作</th>
+<div class="container-fluid" >
+	<table class="table-sm table-hover table-striped text-center w-100 container-fluid" >
+		<form method="get" action="/materials">
+			<thead class="thead-light">
+			<tr class="row" style="margin:0px">
+				<th class="col-1">类型
+					<select id="type" name="type" onchange="selected(this)" class=" text-center" style="width:  16px">
+						<option value=""></option>
+						{% for type in typeData %}
+						<option value="{{ type }}">{{ type }}	</option>
+						{% endfor %}
+					</select>
+				</th>
+				<th class="col-1" style="margin:0px">品牌
+					<select name="brand" class=" text-center" onchange="selected(this)"  style="width:  16px">
+						<option value=""></option>
+						{% for brand in brandData %}
+							<option >{{ brand }}</option>
+						{% endfor %}
+					</select>
+				</th>
+				<th class="col-1" title="Platform" style="margin:0px">平台</th>
+				<th class="col-1" title="Code" style="margin:0px">代号</th>
+				<th class="col-3" style="margin:0px">物料名称</th>
+				<th class="col-1" style="margin:0px">TDP</th>
+				<th class="col-1" style="margin:0px">SPEC</th>
+				<th class="col-1" style="margin:0px">创建者
+					<select name="usr" class=" text-center" onchange="selected(this)"  style="width:  16px">
+						<option value=""></option>
+						{% for usr in usrData %}
+							<option >{{ usr }}</option>
+						{% endfor %}
+					</select>
+				</th>
+				<th class="col-2" style="margin:0px">操作</th>
 			</tr>
 		</thead>
 		<tbody>
 			{% for col in  posts.object_list %}
-				<tr >
-					<td>{{col.4}}</td>
-					<td>{{col.1}}</td>
-					<td>{{col.2}}</td>
-					<td>{{col.3}}</td>
-					<td>{{col.5}}</td>
-					<td>{{col.7}}</td>
-					<td>{{col.9}}</td>
-					<td>{{col.8}}</td>
-					<td onclick="event.stopPropagation()">
-						<button type="button" class="btn-sm " onclick="window.document.location = '/resource?id={{col.0}}'" >附件列表</button>
-						<button type="button" class="btn-sm btn-info" onclick="window.document.location = '/updateMaterial?id={{col.0}}'" >修改</button>
+				<tr class="row">
+					<td class="col-1 text-truncate" title="{{col.4}}">{{col.4}}</td>
+					<td class="col-1 text-truncate" title="{{col.1}}">{{col.1}}</td>
+					<td class="col-1 text-truncate" title="{{col.2}}">{{col.2}}</td>
+					<td class="col-1 text-truncate" title="{{col.3}}">{{col.3}}</td>
+					<td class="col-3 text-truncate" title="{{col.5}}" >{{col.5}}</td>
+					<td class="col-1 text-truncate" title="{{col.7}}">{{col.7}}</td>
+					<td class="col-1 text-truncate" title="{{col.9}}">{{col.9}}</td>
+					<td class="col-1 text-truncate" title="{{col.6}}">{{col.6}}</td>
+					{% block mater %}
+					<td  class="col-2" onclick="event.stopPropagation()">
+						<button type="button" class="btn-sm btn-info" onclick="window.document.location = '/resource?id={{col.0}}'" >详细信息</button>
+						<button type="button" class="btn-sm btn-warning" onclick="window.document.location = '/updateMaterial?id={{col.0}}'" >修改</button>
 						<button type="button" class="btn-sm btn-danger" onclick="window.document.location = '/deleteMaterial?id={{col.0}}'" >删除</button>
 						{{ superbtn }}
 					</td>
+					{% endblock %}
+
 				</tr>
 			{% endfor %}
 		</tbody>
+		</form>
 
 	</table>
+
 </div>
-<div class="container">
+<div class="container-fluid">
 	<div class="row">
-	<div class="col-8"></div>
-	<table class="table col-4 pull-right">
+	<div class="col-9"></div>
+	<table class="table col-3 pull-right">
 		<tr>
+			{% block page %}
 			<td>{% if posts.has_previous %}
-				<a  href="/materials/?page={{ posts.previous_page_number }}&type={{ type }}&name={{ name }}&source={{ source }}&creater={{ creater }}&fy={{ fy }}&fm={{ fm }}&fd={{ fd }}&ty={{ ty }}&tm={{ tm }}&td={{ td }}">上一页</a>
+				<a  href="/materials/?page={{ posts.previous_page_number }}">上一页</a>
 				{% endif %}
 			</td>
 			<td><input class="form-control-ms text-center" style="width: 45px;" id="nowpage" name="page" value="{{ page }}"/>
@@ -54,13 +82,28 @@
 			</td>
 			<td>
 				{% if posts.has_next %}
-				<a  href="/materials/?page={{ posts.next_page_number }}&type={{ type }}&name={{ name }}&source={{ source }}&creater={{ creater }}&fy={{ fy }}&fm={{ fm }}&fd={{ fd }}&ty={{ ty }}&tm={{ tm }}&td={{ td }}">下一页</a>
+				<a  href="/materials/?page={{ posts.next_page_number }}">下一页</a>
 				{% endif %}
 			</td>
-			<td><button class="btn btn-primary w-100" type="submit">跳转</button></td>
+			{% endblock %}
+			<td><input class="btn btn-primary w-100" type="button" onclick="jumpToPage()" value="跳转"></td>
 		</tr>
 	</table>
-
 	</div>
 </div>
+
+{% block script %}
+<script>
+function jumpToPage(){
+	var page = document.getElementById('nowpage').value;
+	console.log(page)
+	window.location.href="/materials/?page="+page;
+}
+</script>
+<script type="text/JavaScript">
+	function selected(data){
+		window.location.href="/materials?"+data.name+"="+data.value;
+	}
+</script>
+{% endblock %}
 {% endblock %}

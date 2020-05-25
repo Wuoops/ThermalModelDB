@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 {% block content %}
 {% load static %}
-<div class="container" >
+<div class="container-fluid " >
 	<table class="table table-hover table-striped text-center" >
 		<thead class="thead-light">
 			<tr>
@@ -16,7 +16,7 @@
 		</thead>
 		<tbody>
 			{% for col in  posts.object_list %}
-				<tr onclick="window.document.location = '/{{col.10}}?id={{col.2}}'" style="background-color: {{col.12}};">
+				<tr  style="background-color: {{col.12}};">
 					<!-- <td>{{col.0}}</td> -->
 					<td>{{col.1}}</td>
 					<td>{{col.11}}</td>
@@ -26,7 +26,7 @@
 					<td>{{col.8}}</td>
 					<td onclick="event.stopPropagation()">
 						<!-- <button type="button" class="btn-sm btn-outline-secondary" onclick="window.document.location = '/{{col.10}}?id={{col.2}}'">物料详情</button> -->
-						<button type="button" class="btn-sm btn-success" onclick="window.document.location = '/resBranch/?id={{col.2}}&branch={{col.13}}'" >基于此模型</button>
+						<button type="button" class="btn-sm btn-success" onclick="window.document.location = '/resBranch/?id={{col.2}}&branch={{col.13}}'" >基于此版本</button>
 					</td>
 				</tr>
 			{% endfor %}

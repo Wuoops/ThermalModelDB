@@ -11,12 +11,22 @@ from materials.Utils.utils import *
 
 
 from django.contrib.auth.decorators import login_required
+from config import Config
 @login_required
 def upload(request):
-    list = model_search()
-    # print(list)
+    lines = Config.lines
+    typeData = getMaterList('type')
+    brandData = getMaterList('brand')
+    usrData = getMaterList('usr')
     current_page = request.GET.get('page')
-    paginator = Paginator(list,10)
+    queryDict = request.GET.dict()
+    # print(queryDict)
+    list = model_search(queryDict)
+
+    current_page = request.GET.get('page')
+    if current_page is None:
+        current_page = 1
+    paginator = Paginator(list,lines)
     try:
         posts = paginator.page(current_page)
     except PageNotAnInteger as e :
@@ -25,7 +35,7 @@ def upload(request):
         posts = paginator.page(1)
     pagemax=paginator.num_pages
     # print(posts)
-    return render(request,'uploadPage.html',{'posts':posts,'pagemax':pagemax})
+    return render(request,'uploadPage.html',{'posts':posts,'pagemax':pagemax,'page':current_page,'typeData':typeData,'brandData':brandData,'usrData':usrData})
 @login_required
 def resupload(request):
     mid = request.GET.get('id')
@@ -66,16 +76,15 @@ def resBranch(request):
             branchDic=changeListToDIct(branchList)
             dic,list,allBranckDict = resBranchmod(request)
 
-            # return render(request,'uploadPage/branch.html',{'branch_set':'<div class="col"><td><input type="submit" value="版本分支设置" class="btn btn-info w-100"></td></div>','list':materList,'user_list':userDic,'branch_list':branchDic})
-            return render(request,'branch.html',{'branch_set':'<div class="col"><td><input type="submit" value="版本分支设置" class="btn btn-info w-100"></td></div>','list':list,'user_list':dic,'branch_list':allBranckDict})
-
+            branchset = """<div class="col"><td><input onclick="window.document.location = '/branchSet?id=%s' " type="button" value="版本分支设置" class="btn btn-info w-100"></td></div>""" %mid
+            return render(request,'branch.html',{'branch_set':branchset,'list':list,'user_list':dic,'branch_list':allBranckDict})
         else:
             dic,list,allBranckDict = resBranchmod(request)
             return render(request,'branch.html',{'list':list,'user_list':dic,'branch_list':allBranckDict})
     else :
         #POST请求过来
         file = request.FILES.getlist('files')
-
+        print(file)
         if file == None:
             pass
         else:
@@ -129,12 +138,12 @@ def resBranch(request):
             mkdir_p(ftpPath)
             #文件上传的方法
             FileUpload(file,ftpPath)
-        # return render(request,'uploadPage/branch.html')
+
+
         return redirect('/resource/?id='+str(request.POST.get('mid')))
 
 @login_required
 def resource(request):
-
     mid = request.GET.get('id')
     #版本分支刘表
     branchList = getBranchList()
@@ -142,6 +151,8 @@ def resource(request):
     #数据列表
     list = resourceModel(mid)
     current_page = request.GET.get('page')
+    if current_page is None:
+        current_page = 1
     paginator = Paginator(list,10)
     try:
         posts = paginator.page(current_page)
@@ -154,10 +165,23 @@ def resource(request):
 
     #获取ftp地址
     ftpAddr = Config.ftpdAddr
-
+    ftpPath = Config.ftpPath
+    #物料附件地址
+    materFileAddr = ftpAddr+'materFile/mater'+mid
+    materFilePath = ftpPath+'materFile/mater'+mid
+    if (os.path.exists(materFilePath) == False):
+        materFileHtml = "<div></div>"
+    else:
+        materFileHtml="""<a href='"""+materFileAddr+"""' class="btn btn-success">下载附件</a>"""
+    print(materFilePath)
     #左侧详情
     materInfo = getMaterByid(str(mid))
-
+    #获取封面
+    picAddr,cover = getCover(mid)
+    if cover == None:
+        picHtml = """<div></div>"""
+    else:
+        picHtml = """<div onclick="window.open('"""+picAddr+"""')"><img src="""+picAddr+""" class="w-100"/></div>"""
     #根据物料ID查询物料信息
     res = getMaterTags(mid)
     kList = []
@@ -168,7 +192,9 @@ def resource(request):
     #将两个list合并成一个dict
     taglist = listsTodict(kList,vList)
 
-    return render(request,'resource.html',{'posts':posts,'branch_list':branch_list,'mid':mid,'ftpAddr':ftpAddr,'materInfo':materInfo,'taglist':taglist})
+    return render(request,'resource.html',{'page':current_page,'posts':posts,\
+                                           'branch_list':branch_list,'mid':mid,'ftpAddr':ftpAddr,\
+                                           'materInfo':materInfo,'taglist':taglist,'cover':picHtml,'materfile':materFileHtml})
 #############################
 #数据上传
 from django.views.generic.edit import FormView
@@ -189,3 +215,4 @@ class FileFieldView(FormView):
             return self.form_valid(form)
         else:
             return self.form_invalid(form)
+

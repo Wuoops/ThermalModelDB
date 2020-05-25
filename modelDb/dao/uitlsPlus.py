@@ -40,6 +40,9 @@ class Utils(object):
         result=self.cursor.fetchall()
         return result
     #x修改
+    def modify(self,sql):
+        self.cursor.execute(sql)
+        # self.connect.commit()
     def modifyP(self,sql,args):
         self.cursor.execute(sql,args)
         # self.connect.commit()

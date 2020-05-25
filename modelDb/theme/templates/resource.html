@@ -2,13 +2,19 @@
 {% block content %}
 {% load static %}
 
-<div class="container" >
+<div class="container-fluid" >
 	<div class="row">
-		<div class="col-xs-2">
+		<div class="col-3">
 			<div class="card">
 			<div class="card-body">
-			<h3 class="card-title">{{ materInfo.0 }}</h3>
-			<h5 class="card-title">{{ materInfo.5 }}&nbsp{{ materInfo.3 }}&nbsp{{ materInfo.4 }}</h5>
+			<h3 class="card-title text-truncate" >{{ materInfo.0 }}</h3>
+			{% autoescape off %}
+				{{ cover }}
+			{% endautoescape %}
+			<h5 class="card-title text-truncate">{{ materInfo.5 }}&nbsp{{ materInfo.3 }}&nbsp{{ materInfo.4 }}</h5>
+			<h5 class="card-title text-truncate">TDP:{{ materInfo.7 }}Watte</h5>
+			<h5 class="card-title text-truncate">{{ materInfo.9 }}:{{ materInfo.8 }}℃</h5>
+
 			<span class="text-light bg-secondary">{{ materInfo.1 }}</span>
 			<div></div>
 			<!--      <span class="bg-secondary">Create Time:</span>-->
@@ -23,10 +29,14 @@
 			{% endfor %}
 			</table>
 			<a href="/createtags?id={{ mid }}" class="btn btn-primary">纠错 / 新增</a>
+<!--			<a href="/createtags?id={{ mid }}" class="btn btn-success">下载附件</a>-->
+			{% autoescape off %}
+				{{ materfile }}
+			{% endautoescape %}
 			</div>
 			</div>
 		</div>
-		<div class="col">
+		<div class="col-9">
 			<table class="table table-hover table-striped text-center" >
 			<thead class="thead-light">
 			<tr>

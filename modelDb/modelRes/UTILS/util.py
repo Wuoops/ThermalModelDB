@@ -54,7 +54,22 @@ def FileUpload(file,ftpPath):
         for chunk in obj.chunks():
             f.write(chunk)
         f.close()
+
+#文件上传
+def FileUploadRename(file,ftpPath,fileName):
+    for obj in file:
+        f = open(ftpPath+'/'+fileName, 'wb')
+        for chunk in obj.chunks():
+            f.write(chunk)
+        f.close()
+
+
 #判断文件夹是否存在，如果不存在则创建一个
 def mkdir_p(path):
+    if (os.path.exists(path) == False):
+        os.mkdir(path)
+
+#清空文件夹中的所有文件
+def deleteFileFromPath(path):
     if (os.path.exists(path) == False):
         os.mkdir(path)

@@ -15,35 +15,22 @@
         </div>
     </div>
     <div class="row">
-<!--        原始数据,提交修改-->
-        <div class="col-4">
-            <form method="post" action="/updateMaterialTags">
-                <table class="table">
-                    <tr style="display:none"><td><input name="id" value="{{ mid }}"></td></tr>
-                    {% for k,v in taglist.items %}
-                    <tr>
-                        <th>{{ k }}</th>
-                        <td><input name="{{ k }}" value="{{ v }}"></td>
-                    </tr>
-                    {% endfor%}
-                    <tr><td colspan="2"><button class="btn w-100" type="submit">提交修改</button></td></tr>
-                </table>
-            </form>
-        </div>
-<!--        新增数据-->
-        <div class="col">
+        <div class="col-6">
         <form method="post" action="/createtags">
             <div id="div1"></div>
             <table class="table" id="table">
-                <tr>
-                    <th>Key</th>
-                    <td><input name="inputKey0"></td>
-                    <th>Value</th>
-                    <td><input name="inputValue0"></td>
-                </tr>
+                    <thead>
+                        <th>标签名称</th>
+                        <th>标签值</th>
+                    </thead>
+                    {% for k,v in taglist.items %}
+                    <tr>
+                        <td><input name="inputKey{{ forloop.counter }}" value="{{ k }}"></td>
+                        <td><input name="inputValue{{ forloop.counter }}" value="{{ v }}"></td>
+                    </tr>
+                    {% endfor%}
                 <tr style="display:none"><td><input name="id" value="{{ mid }}"></td></tr>
             </table>
-
 
             <table class="table">
                 <tr>
@@ -51,20 +38,68 @@
                     <td><button class="btn w-100" type="button" onclick="delOne()">删除一行</button></td>
                     <td><button class="btn w-100" type="submit">提交</button></td>
                 </tr>
+
+
             </table>
         </form>
         </div>
+        <div class="col-6">
+            <table class="table">
+                <tr>
+                    <td class="border" style="height:252px ">
+                        {% autoescape off %}
+				        {{ cover }}
+				        {% endautoescape %}
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <form method="post" action="/uploadCover/?id={{mid}}"  enctype="multipart/form-data">
+                            <div class="input-group mb-3">
+                                <div class="custom-file">
+                                    <input id="cover" name="cover" type="file" class="custom-file-input" accept="image/*">
+                                    <label for="cover" class=" custom-file-label text-truncate">点击上传封面</label>
+                                </div>
+                                <div class="input-group-prepend">
+                                    <button class="btn">提交</button>
+                                </div>
+                            </div>
+                        </form>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                    {% autoescape off %}
+                        {{ materfile }}
+                    {% endautoescape %}
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                    <form method="POST" action="/uploadFiles/?id={{mid}}" enctype="multipart/form-data">
+
+                        <div class="input-group mb-3">
+                        <input type="file" name="files" class="form-control"  multiple='multiple' >
+
+                        <div class="input-group-prepend">
+					    <input type="submit" value="上传" class="btn btn-success w-100">
+                        </div>
+                    </form>
+                    </td>
+                </tr>
+            </table>
+        </div>
     </div>
 </div>
-
-
 <script>
-    var num=1
+    var num = {{ num }}
+    num=num+1
+
     function addOne(){
         var table = document.getElementById('table');
         var tr = document.createElement("tr");
-        var thKey = document.createElement("th");
-        var thValue = document.createElement("th");
+<!--        var thKey = document.createElement("th");-->
+<!--        var thValue = document.createElement("th");-->
 
         var tdK = document.createElement("td");
         var tdV = document.createElement("td");
@@ -78,16 +113,16 @@
 
         tr.setAttribute("name","tr"+num);
         tr.setAttribute("id","tr"+num);
-        thKey.setAttribute("id","th"+num);
+<!--        thKey.setAttribute("id","th"+num);-->
 
-        thKey.innerHTML='Key'
-        thValue.innerHTML='Value'
+<!--        thKey.innerHTML='Key';-->
+<!--        thValue.innerHTML='Value';-->
         table.appendChild(tr);
-        tr.appendChild(thKey);
+<!--        tr.appendChild(thKey);-->
         tr.appendChild(tdK);
 
         tdK.appendChild(inputKey);
-        tr.appendChild(thValue);
+<!--        tr.appendChild(thValue);-->
         tr.appendChild(tdV);
         tdV.appendChild(inputValue);
 
@@ -96,10 +131,19 @@
     }
     function delOne(){
         num--;
-        var table = document.getElementById('table');
-        var tr = document.getElementById('tr'+num);
-        var tdk = document.getElementById('tr'+num);
-        table.removeChild(tr);
+        if (num > {{ num }}){
+            var table = document.getElementById('table');
+            var tr = document.getElementById('tr'+num);
+            table.removeChild(tr);
+        }else{
+        num = {{ num }}+1
+        }
     }
+
+$('.custom-file-input').on('change', function() {
+	let fileName = $(this).val().split('\\').pop();
+	$(this).next('.custom-file-label').addClass("selected").html(fileName);
+});
+
 </script>
 {% endblock %}

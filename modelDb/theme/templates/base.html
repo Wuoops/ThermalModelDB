@@ -14,29 +14,37 @@
 
 	</head>
 	<body>
-		<div class="container head">
+		<div class="container-fiuled head">
 			<nav class="navbar navbar-expand-lg navbar-light bg-light">
 				<a class="navbar-brand" href="/homePage/">首页</a>
 				<div class="collapse navbar-collapse" id="navbarSupportedContent">
 					<ul class="navbar-nav mr-auto">
-						<li class="nav-item "><a class="nav-link" href="/materials/">物料查询</a></li>
-						<li class="nav-item"><a class="nav-link" href="/createMaterial/">创建料号</a></li>
-						<li class="nav-item"><a class="nav-link" href="/upload/">模型上传</a></li>
-						<li class="nav-item"><a class="nav-link" href="/recyclebin/">回收站</a></li>
+						<li id="materials" class="nav-item "><a class="nav-link" href="/materials/">物料查询</a></li>
+						<li id="createMaterial" class="nav-item"><a class="nav-link" href="/createMaterial/">创建料号</a></li>
+						<li id="upload" class="nav-item"><a class="nav-link" href="/upload/">模型上传</a></li>
+						<li id="recyclebin" class="nav-item"><a class="nav-link" href="/recyclebin/">回收站</a></li>
+<!--						<li id="recyclebin" class="nav-item active"><a class="nav-link" href="/recyclebin/">回收站</a></li>-->
 					</ul>
-
-
+					<span>{{ user.first_name }}</span>
+					<a href="/logout">&nbsp 注销</a>
 
 				</div>
 			</nav>
-
-<!--            <form method="get" action="model">-->
-<!--			<div class="jumbotron">	</div>-->
-			{% block content %} {% endblock %}
+<!--			<div class="container">-->
+<!--				<form method="get" >-->
+<!--					<div class="input-group" style="width:800px;padding:30px">-->
+<!--						<input id="search" type="text" name="search" class="form-control">-->
+<!--						<div class="input-group-prepend">-->
+<!--							<button class="input-group-text btn" type="submit" >Search</button>-->
+<!--						</div>-->
+<!--					</div>-->
+<!--				</form>-->
+<!--			</div>-->
+		</div>
+		{% block content %} {% endblock %}
 		<footer class="container text-center" >
 			<hr >
 <!--			<span class="text-muted" style="margin: 15px;">Powered by Wu.Quentin@inventec.com</span>-->
 		</footer>
-		</div>
 	</body>
 </html>
