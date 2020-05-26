@@ -282,7 +282,7 @@ def deleteMaterial(request):
     return redirect('/materials')
 
 
-
+#上传封面
 @login_required
 def uploadCover(request):
     mid = request.GET.get('id')
@@ -314,5 +314,5 @@ def uploadFiles(request):
     fileAddr = ftpPath+'materFile/mater'+mid
     files = request.FILES.getlist('files')
     FileUpload(files,fileAddr)
-    print(files)
+    # print(files)
     return  redirect('/createtags?id='+str(mid))

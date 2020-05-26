@@ -3,7 +3,7 @@ from dao.uitlsPlus import *
 import re
 from django.shortcuts import render,redirect
 from config import Config
-
+import os
 # 判断一个字符串是否是小数
 def IsFloat(s):
     pattern = '^-?\d+\.?\d*$'
@@ -274,6 +274,15 @@ def getMaterTags(mid):
     data = u.searchListP(sql,mid)
     return data
 
+def getMaterTagList(mid):
+    res = getMaterTags(mid)
+    kList = []
+    vList = []
+    for tags in res:
+        kList.append(tags[1])
+        vList.append(tags[2])
+    taglist = listsTodict(kList,vList)
+    return taglist
 #根据id查询物料信息
 def getMaterByid(mid):
     sql = """    SELECT
@@ -360,7 +369,7 @@ def movoToRecyclebin(id):
     up.commit()
     up.close()
 
-
+# 获取封面
 def getCover(mid):
     daoPlus = Utils()
     sql = 'select cover from d_materials where id = %s'
@@ -370,3 +379,23 @@ def getCover(mid):
     picAddr=Config.picAddr+str(cover)
 
     return picAddr,cover
+
+def getPicHtml(mid):
+    picAddr,cover = getCover(mid)
+    if cover == None:
+        picHtml = """<div></div>"""
+    else:
+        picHtml = """<div onclick="window.open('"""+picAddr+"""')"><img src="""+picAddr+""" class="w-100"/></div>"""
+    return picHtml
+def getMaterFileHtml(mid):
+    ftpAddr = Config.ftpdAddr
+    ftpPath = Config.ftpPath
+     #物料附件地址
+    materFileAddr = ftpAddr+'materFile/mater'+mid
+    materFilePath = ftpPath+'materFile/mater'+mid
+    if (os.path.exists(materFilePath) == False):
+        materFileHtml = "<div></div>"
+    else:
+        materFileHtml="""<a href='"""+materFileAddr+"""' class="btn btn-success">下载附件</a>"""
+
+    return  materFileHtml

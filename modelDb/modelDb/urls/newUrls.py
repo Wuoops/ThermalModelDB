@@ -3,7 +3,7 @@ from django.conf.urls.static import static
 from django.conf import settings
 from django.contrib import admin
 from materials.views import materials,createMaterial,createMaterialTags,updateMaterialTags,updateMaterial,deleteMaterial,uploadFiles,uploadCover
-from modelRes.views import upload,resupload,resBranch,resource
+from modelRes.views import upload,resupload,resBranch,resource,branchFilePage,branchHistory
 from setPages.views import branchSet,createBranch,updateBranch
 from Login.views import login_view,logoutfunction
 from homePage.views import homePage
@@ -33,5 +33,7 @@ urlpatterns = [
     url(r'^logout/', logoutfunction),
     url(r'^uploadFiles/', uploadFiles),
     url(r'^uploadCover/', uploadCover),
+    url(r'^branchFilePage/', branchFilePage),
+    url(r'^branchHistory/', branchHistory),
 
 ]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

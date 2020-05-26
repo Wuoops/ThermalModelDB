@@ -1,0 +1,30 @@
+{% extends 'resource.html' %}
+{% block table %}
+<table class="table table-hover table-striped text-center" >
+<thead class="thead-light">
+<tr>
+    <!-- <th>ID</th> -->
+    <th>文件名</th>
+    <th>文件类型</th>
+    <th>描述信息</th>
+    <th>版本</th>
+    <th>操作</th>
+</tr>
+</thead>
+<tbody>
+{% for col in  posts.object_list %}
+    <tr  style="background-color: {{col.4}};">
+        <!-- <td>{{col.0}}</td> -->
+        <td>{{col.3}}</td>
+        <td>{{col.4}}</td>
+        <td>{{col.6}}</td>
+        <td>Latest</td>
+        <td onclick="event.stopPropagation()">
+            <button type="button" class="btn-sm btn-success" onclick="window.document.location = '{{ col.7 }} '   " >下载附件</button>
+            <button type="button" class="btn-sm btn-info" onclick="window.document.location = '/branchHistory?id={{ mid }}&resid={{ col.1 }}&fileid={{ col.2 }}'" >历史版本</button>
+        </td>
+    </tr>
+{% endfor %}
+</tbody>
+</table>
+{% endblock %}

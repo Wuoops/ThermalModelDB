@@ -137,17 +137,26 @@ def resBranch(request):
             ftpPath = Config.ftpPath+strpath
             mkdir_p(ftpPath)
             #文件上传的方法
-            FileUpload(file,ftpPath)
-
+            fileNameList,suffixList = FileUpload(file,ftpPath)
+            #将文件信息写入数据库
+            print(fileNameList)
+            print(suffixList)
 
         return redirect('/resource/?id='+str(request.POST.get('mid')))
 
 @login_required
 def resource(request):
     mid = request.GET.get('id')
-    #版本分支刘表
-    branchList = getBranchList()
-    branch_list= changeListToDIct(branchList)
+
+    #左侧详情
+    materInfo = getMaterByid(str(mid))
+    #获取封面html
+    picHtml = getPicHtml(mid)
+    #根据物料ID查询物料信息
+    taglist = getMaterTagList(mid)
+    #获取物料信息html
+    materFileHtml = getMaterFileHtml(mid)
+
     #数据列表
     list = resourceModel(mid)
     current_page = request.GET.get('page')
@@ -162,57 +171,74 @@ def resource(request):
         posts = paginator.page(1)
     pagemax=paginator.num_pages
 
+    return render(request,'resource.html',{'page':current_page,'posts':posts,\
+                                           'mid':mid,'pagemax':pagemax,\
+                                           'materInfo':materInfo,'taglist':taglist,'cover':picHtml,'materfile':materFileHtml})
 
-    #获取ftp地址
-    ftpAddr = Config.ftpdAddr
-    ftpPath = Config.ftpPath
-    #物料附件地址
-    materFileAddr = ftpAddr+'materFile/mater'+mid
-    materFilePath = ftpPath+'materFile/mater'+mid
-    if (os.path.exists(materFilePath) == False):
-        materFileHtml = "<div></div>"
-    else:
-        materFileHtml="""<a href='"""+materFileAddr+"""' class="btn btn-success">下载附件</a>"""
-    print(materFilePath)
+
+
+def branchFilePage(request):
+    mid = request.GET.get('id')
     #左侧详情
     materInfo = getMaterByid(str(mid))
-    #获取封面
-    picAddr,cover = getCover(mid)
-    if cover == None:
-        picHtml = """<div></div>"""
-    else:
-        picHtml = """<div onclick="window.open('"""+picAddr+"""')"><img src="""+picAddr+""" class="w-100"/></div>"""
+    #获取封面html
+    picHtml = getPicHtml(mid)
     #根据物料ID查询物料信息
-    res = getMaterTags(mid)
-    kList = []
-    vList = []
-    for tags in res:
-        kList.append(tags[1])
-        vList.append(tags[2])
-    #将两个list合并成一个dict
-    taglist = listsTodict(kList,vList)
+    taglist = getMaterTagList(mid)
+    #获取物料信息html
+    materFileHtml = getMaterFileHtml(mid)
+    materialsid = request.GET.get('id')
+    source = request.GET.get('source')
+    pid = request.GET.get('latest')
+    #数据列表
+    list = branchFilePageList(materialsid,source,pid)
+    print(list)
+    current_page = request.GET.get('page')
+    if current_page is None:
+        current_page = 1
+    paginator = Paginator(list,10)
+    try:
+        posts = paginator.page(current_page)
+    except PageNotAnInteger as e :
+        posts = paginator.page(1)
+    except EmptyPage as e :
+        posts = paginator.page(1)
+    pagemax=paginator.num_pages
 
-    return render(request,'resource.html',{'page':current_page,'posts':posts,\
-                                           'branch_list':branch_list,'mid':mid,'ftpAddr':ftpAddr,\
-                                           'materInfo':materInfo,'taglist':taglist,'cover':picHtml,'materfile':materFileHtml})
-#############################
-#数据上传
-from django.views.generic.edit import FormView
-from .forms import FileFieldForm
+    return render(request,'branchfilepage.html',{'materInfo':materInfo,'taglist':taglist,'cover':picHtml,'materfile':materFileHtml,\
+                                                 'page':current_page,'posts':posts,\
+                                                    'mid':mid,'pagemax':pagemax})
 
-class FileFieldView(FormView):
-    form_class = FileFieldForm
-    template_name = 'upload.html'  # Replace with your template.
-    success_url = '...'  # Replace with your URL or reverse().
+def branchHistory(request):
 
-    def post(self, request, *args, **kwargs):
-        form_class = self.get_form_class()
-        form = self.get_form(form_class)
-        files = request.FILES.getlist('file_field')
-        if form.is_valid():
-            for f in files:
-                ...  # Do something with each file.
-            return self.form_valid(form)
-        else:
-            return self.form_invalid(form)
+    mid = request.GET.get('id')
+    #左侧详情
+    materInfo = getMaterByid(str(mid))
+    #获取封面html
+    picHtml = getPicHtml(mid)
+    #根据物料ID查询物料信息
+    taglist = getMaterTagList(mid)
+    #获取物料信息html
+    materFileHtml = getMaterFileHtml(mid)
+    resid = request.GET.get('resid')
+    fileid = request.GET.get('fileid')
+    #数据列表
+    list = historyList(resid,fileid)
+    print(list)
+    current_page = request.GET.get('page')
+    if current_page is None:
+        current_page = 1
+    paginator = Paginator(list,10)
+    try:
+        posts = paginator.page(current_page)
+    except PageNotAnInteger as e :
+        posts = paginator.page(1)
+    except EmptyPage as e :
+        posts = paginator.page(1)
+    pagemax=paginator.num_pages
+
+    return render(request,'branchHistory.html',{'materInfo':materInfo,'taglist':taglist,'cover':picHtml,'materfile':materFileHtml,\
+                                               'page':current_page,'posts':posts,\
+                                                    'mid':mid,'pagemax':pagemax })
+
 
