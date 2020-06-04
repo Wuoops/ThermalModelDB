@@ -27,9 +27,16 @@ def resourceModel(mid):
     """
     obj = Utils()
     list = obj.searchListP(sql,mid)
+    getRemarksql = 'select remark from d_model_resource where materialsid = %s and source = %s and pid = %s '
+    resList = []
+    for i in list:
+        # print(i)
+        getRemarkArgs = [mid,i[5],i[6],]
+        res = obj.searchOneP(getRemarksql,getRemarkArgs)
+        resList.append(i+res)
     obj.close()
-    return list
 
+    return resList
 
 def getUsers():
     obj = Utils()
