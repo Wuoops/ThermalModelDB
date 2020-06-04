@@ -1,67 +1,50 @@
-{% extends 'base.html' %}
-{% block content %}
-{% load static %}
-<div class="container-fluid " >
-	<table class="table table-hover table-striped text-center" >
-		<thead class="thead-light">
-			<tr>
-				<th>模型名称</th>
-				<th>版本分支</th>
-				<th>版本号</th>
-				<th>创建人</th>
-				<th>版本描述</th>
-				<th>创建时间</th>
-				<th>操作</th>
-			</tr>
-		</thead>
-		<tbody>
-			{% for col in  posts.object_list %}
-				<tr  style="background-color: {{col.12}};">
-					<!-- <td>{{col.0}}</td> -->
-					<td>{{col.1}}</td>
-					<td>{{col.11}}</td>
-					<td>{{col.13}}-{{col.3}}</td>
-					<td>{{col.6}}</td>
-					<td>{{col.7}}</td>
-					<td>{{col.8}}</td>
-					<td onclick="event.stopPropagation()">
-						<!-- <button type="button" class="btn-sm btn-outline-secondary" onclick="window.document.location = '/{{col.10}}?id={{col.2}}'">物料详情</button> -->
-						<button type="button" class="btn-sm btn-success" onclick="window.document.location = '/resBranch/?id={{col.2}}&branch={{col.13}}'" >基于此版本</button>
-					</td>
-				</tr>
+{% extends 'resource.html' %}
+{% block table %}
+<table class="table table-hover table-striped text-center" >
+<thead class="thead-light">
+<tr>
+				<!-- <th>ID</th> -->
+	<th>模型名称</th>
+	<th>创建人</th>
+	<th>版本分支</th>
+	<th>操作</th>
+</tr>
+</thead>
+<tbody>
+{% for col in  posts.object_list %}
+	<tr  style="background-color: {{col.4}};">
+		<!-- <td>{{col.0}}</td> -->
+		<td>{{col.0}}</td>
+		<td>{{col.2}}</td>
+		<td>{{col.3}}</td>
+		<td onclick="event.stopPropagation()">
+			<button type="button" class="btn-sm btn-success" onclick="window.document.location = '/resBranch?id={{ col.1 }}&branch={{ col.5 }}'" >基于当前分支</button>
+		</td>
+	</tr>
+{% endfor %}
+<form method="get" action="/newBranch/">
+<input name="id" value="{{ mid }}"   style=" display: none;" >
+<tr class="table-hover" >
+	<td><button type="button" class="btn-sm btn" ><span class="glyphicon glyphicon-plus"></span> </button></td>
+	<td></td>
+	<td class="thead-light">
+		<select id="creater" name="branch" class="form-control ">
+			{% for k,v in branch_list.items %}
+				<option value= {{ k }} >{{ v }}</option>
 			{% endfor %}
-			<tr class="table-hover" onclick="window.document.location = '/resBranch/?id={{mid}}'">
-				<!-- <td class="glyphicon glyphicon-plus"></td> -->
-				<td><button type="button" class="btn-sm btn" ><span class="glyphicon glyphicon-plus"></span> </button></td>
-				<td colspan="5"></td>
-<!--				<td>aaa{{mid}}</td>-->
-				<td><button type="button" class="btn-sm btn">新增版本分支</button></td>
-			</tr>
-		</tbody>
-
-	</table>
-		<div class="container">
-			<div class="row">
-			<div class="col-8">
-			</div>
-			<table class="table col-4 pull-right">
-				<tr>
-					<td>{% if posts.has_previous %}
-						<a  href="/resupload/?page={{ posts.previous_page_number }}&id={{ mid }}">上一页</a>
-						{% endif %}
-					</td>
-					<td><input class="form-control-ms text-center" style="width: 45px;" id="nowpage" name="page" value="{{ page }}"/>
-					 /<a name="pagemax" >{{ pagemax }}</a>
-					</td>
-					<td>
-						{% if posts.has_next %}
-						<a  href="/resupload/?page={{ posts.next_page_number }}&id={{ mid }}">下一页</a>
-						{% endif %}
-					</td>
-					<td><button class="btn btn-primary w-100" type="submit">跳转</button></td>
-				</tr>
-			</table>
-</div>
-		</div>
-</div>
+		</select>
+	</td>
+	<td><button type="submit" class="btn-sm btn" >新增版本分支</button></td>
+</tr>
+</form>
+<tr>
+	<td colspan="3">
+	<td><button type="button" class="btn-sm btn" onclick="window.document.location = '/branchSet/?id={{mid}}'">版本分支设置</button></td>
+	</td>
+</tr>
+</tbody>
+</table>
 {% endblock %}
+
+
+

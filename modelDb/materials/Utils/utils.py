@@ -299,7 +299,7 @@ def getMaterByid(mid):
                 m.create_date,
                 '%%Y-%%m-%%d %%H:%%i:%%s'
             )  create_time    
-                 ,platform,code,brand,type,tdp,spec,temptype
+                 ,platform,code,brand,type,tdp,spec,temptype,id
                 FROM
             d_materials AS m
         INNER JOIN d_users AS S

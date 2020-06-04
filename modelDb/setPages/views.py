@@ -40,7 +40,7 @@ def createBranch(request):
         daoPlus.modifyP(sql,args)
     daoPlus.commit()
     daoPlus.close()
-    return redirect('/resBranch?id='+str(mid))
+    return redirect('/resupload?id='+str(mid))
 
 @login_required
 def updateBranch(request):
@@ -67,4 +67,4 @@ def updateBranch(request):
 
     mid = request.POST.get('id')
 
-    return redirect('/resBranch?id='+str(mid))
+    return redirect('/resupload?id='+str(mid))

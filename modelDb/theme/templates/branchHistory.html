@@ -1,12 +1,13 @@
-    {% extends 'resource.html' %}
+{% extends 'resource.html' %}
 {% block table %}
 <table class="table table-hover table-striped text-center" >
 <thead class="thead-light">
 <tr>
+    <th>物料名称</th>
+    <th>创建人</th>
+    <th>版本分支</th>
     <th>版本号</th>
-    <th>文件名</th>
-    <th>文件类型</th>
-    <th>描述信息</th>
+    <th>备注</th>
     <th>操作</th>
 </tr>
 </thead>
@@ -14,11 +15,12 @@
 {% for col in  posts.object_list %}
     <tr  style="background-color: {{col.4}};">
         <td>{{col.0}}</td>
-        <td>{{col.4}}</td>
-        <td>{{col.5}}</td>
-        <td>{{col.6}}</td>
+        <td>{{col.3}}</td>
+        <td>{{col.2}}</td>
+        <td>{{col.1}}</td>
+        <td>{{ col.4 }}</td>
         <td onclick="event.stopPropagation()">
-            <button type="button" class="btn-sm btn-success" onclick="window.document.location = '{{ col.9 }} '   " >下载附件</button>
+            <button type="button" class="btn-sm btn-info" onclick="window.document.location = '/historyFilePage/?id={{ col.7 }}&resid={{ col.5 }} '   " >附件列表</button>
         </td>
     </tr>
 {% endfor %}

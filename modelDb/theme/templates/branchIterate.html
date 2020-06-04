@@ -1,0 +1,55 @@
+{% extends 'branch.html' %}
+{% block iterate %}
+<form method="get" action="/iterateCommit">
+    <input name="id" value="{{ mid }}"   style=" display: none;" >
+    <input name="branch" value="{{ branch }}"  style=" display: none; ">
+    <input name="iterateResId" value="{{ iterateResId }}"  style=" display: none; ">
+{% for file in posts.object_list %}
+    <tr>
+        <td>{{ file.5 }}</td>
+        <td>{{ file.6 }}</td>
+        <td>
+            <input name="{{ file.0 }}_{{ file.1 }}_{{ file.2 }}" value="{{ file.3 }}">
+        </td>
+        <td>
+            <button type="button" class="btn btn-danger" style="width:70px"  onclick="window.document.location = '/deletefile/?pid={{ file.0 }}&resid={{ file.1 }}&fileid={{ file.2 }}&id={{ mid }}&branch={{ branch }}' " >删除</button>
+        </td>
+    </tr>
+{% endfor %}
+    <script>
+
+    </script>
+    <tr>
+        <td>
+            <input class="btn btn-secondary w-100" disabled="disabled" style="width:70px" type="submit"  value="迭代中">
+        </td>
+        <td>
+            <button class="btn btn-warning w-100"style="width:70px" type="button" onclick="window.document.location = '/giveupiterate?id={{ mid }}&branch={{ branch }}'">放弃迭代</button>
+        </td>
+        <td colspan="2">
+            <input class="btn btn-info w-100" style="width:70px" type="submit"  value="提交修改">
+        </td>
+    </tr>
+</form>
+{% endblock %}
+{% block fileupload %}
+<form method="POST" action="/iterateFileupload/" enctype="multipart/form-data">
+    <input name="id" value="{{ mid }}"   style=" display: none;" >
+    <input name="branch" value="{{ branch }}"  style=" display: none; ">
+    <input name="iterateResId" value="{{ iterateResId }}"  style=" display: none; ">
+<div class="row">
+    {% autoescape off %}
+    {{ branch_set }}
+    {% endautoescape %}
+<!--				文件上传按钮-->
+    <div class="col">
+        <input id="fileul" type="file" multiple = "multiple" class="btn btn-secondary w-100" style="margin-bottom: 20px;  " name="files">
+    </div>
+    <div class="col">
+    </div>
+    <div class="col">
+        <td><input type="submit" value="批量上传" class="btn btn-success w-100"></td>
+    </div>
+</div>
+</form>
+{% endblock %}

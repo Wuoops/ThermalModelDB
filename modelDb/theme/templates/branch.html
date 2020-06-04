@@ -1,62 +1,63 @@
-{% extends 'base.html' %}
-{% block content %}
+{% extends 'resource.html' %}
+{% block table %}
 {% load static %}
-<form method="POST" action="resBranch" enctype="multipart/form-data">
 		<div class="container">
 			<div class="row">
-				<div class="col">
-					<table  class=" container table table-hover table-striped text-center">
-						<tr>
-							<th colspan="2">物料确认</th>
-						</tr>
-						<tr class="row">
-							<th class="thead-light col">料号</th>
-							<td class="thead-light col"><input name="mid" class="form-control mr-sm-2 col" value="{{ list.0 }}" /></td>
-						</tr>
-						<tr class="row">
-							<th class="col thead-light">名称</th>
-							<td class="thead-light col"><input class="col form-control mr-sm-2"  value="{{ list.1 }}"/></td>
-						</tr>
-						<tr class="row">
-							<th class="thead-light col">类型</th>
-							<td class="thead-light col"><input class="form-control mr-sm-2 col"  value="{{ list.2 }}"/></td>
-						</tr>
-						<tr class="row">
-							<th class="thead-light col">创建者</th>
-							<td class="thead-light col"><input class="form-control mr-sm-2 col"  value="{{ list.3 }}"/></td>
-						</tr>
-
-					</table>
-				</div>
-				<div class="col" >
-					<table  class=" container table table-hover table-striped text-center">
-						<tr>
-							<th colspan="2">版本确认</th>
-						</tr>
-						<tr class="row">
-							<th class="thead-light col">版本分支</th>
-							<td class="thead-light col">
-								<select id="creater" name="branch" class="form-control">
-									{% for k,v in branch_list.items %}
-										<option value= {{ k }} >{{ v }}</option>
-									{% endfor %}
-								</select>
-							</td>
-						</tr>
-						<tr class="row">
-							<th class="col thead-light">当前版本</th>
-							<td class="thead-light col" ><input name="version" class="col form-control mr-sm-2"  value="{{ list.5 }}"/></td>
-						</tr>
-						<tr class="row">
-
-						<tr class="row">
-							<th class="thead-light col">版本描述</th>
-							<td class="thead-light col"><input name="remarks" class="form-control mr-sm-2 col" /></td>
-						</tr>
-
-					</table>
+				<div class="card" style="margin-top:10px">
+					<h3>{{ branchInfo.1 }}</h3>
+					<h5>版本号 : {{ branchInfo.2 }}</h5>
 				</div>
 			</div>
+
+			<hr>
+			<div class="row">
+				<table class="table w-100 text-center">
+					<tr>
+						<th>文件</th>
+						<th>后缀</th>
+						<th>说明</th>
+						<th>操作</th>
+					</tr>
+					{% block iterate %}
+
+					<form method="get" action="/branchremark">
+						<input name="id" value="{{ mid }}"   style=" display: none;" >
+						<input name="branch" value="{{ branch }}"  style=" display: none; ">
+					{% for file in posts.object_list %}
+						<tr>
+							<td>{{ file.5 }}</td>
+							<td>{{ file.6 }}</td>
+							<td>
+								<input name="{{ file.0 }}_{{ file.1 }}_{{ file.2 }}" value="{{ file.3 }}">
+							</td>
+							<td>
+								<button type="button" class="btn btn-danger" style="width:70px"  onclick="window.document.location = '/deletefile/?pid={{ file.0 }}&resid={{ file.1 }}&fileid={{ file.2 }}&id={{ mid }}&branch={{ branch }}' " >删除</button>
+<!--									<input name="id" value="{{ mid }}"   style=" display: none;" >-->
+<!--									<input type="file" name="fileupdate">-->
+<!--									<button type="button" class="btn btn-info" style="width:70px">迭代</button>-->
+							</td>
+						</tr>
+					{% endfor %}
+						<script>
+
+						</script>
+						<tr>
+							<td>
+								<button type="button" class="btn btn-success w-100" style="width:70px" onclick="window.document.location ='/branchIterate/?id={{ mid }}&branch={{ branchInfo.5 }}'"  >迭代</button>
+							</td>
+							<td></td>
+							<td colspan="2">
+							<input class="btn btn-info w-100" style="width:70px" type="submit"  value="提交修改">
+							</td>
+						</tr>
+					</form>
+					{% endblock %}
+				</table>
+			</div>
+			{% block fileupload %}
+			<form method="POST" action="/resBranchFileupload/" enctype="multipart/form-data">
+				<input name="id" value="{{ mid }}"   style=" display: none;" >
+				<input name="branch" value="{{ branch }}"  style=" display: none; ">
 			<div class="row">
 				{% autoescape off %}
 				{{ branch_set }}
@@ -71,32 +72,7 @@
 					<td><input type="submit" value="批量上传" class="btn btn-success w-100"></td>
 				</div>
 			</div>
-			<hr>
-			<div class="row">
-				<table class="w-100 col-8 text-center">
-					<tr>
-						<th>文件</th>
-						<th>后缀</th>
-						<th>说明</th>
-						<th>操作</th>
-					</tr>
-					{% for file in fileList %}
-						<td>file.0</td>
-						<td>file.1</td>
-						<td>file.2</td>
-						<td>
-							<input class="btn btn-danger" value="删除">
-							<input class="btn btn-success" value="确认">
-						</td>
-					{% endfor %}
-<!--					<tr>-->
-<!--						<td><input  type="file"  class="btn btn-secondary"  name="files"></td>-->
-<!--						<td style="width:80px"></td>-->
-<!--						<td><input class="form-control"></td>-->
-<!--						<td colspan="2"><input type="submit" value="上传" class="btn btn-success w-100"></td>-->
-<!--					</tr>-->
-				</table>
-			</div>
+			</form>
+			{% endblock %}
 		</div>
-</form>
 {% endblock %}
