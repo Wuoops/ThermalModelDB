@@ -1,78 +1,114 @@
 {% extends 'resource.html' %}
+{% block head %}
+<script type="text/JavaScript">
+	pid = '';
+	resid = '';
+	fileid = '';
+	id = '';
+	branch = '';
+	function values(PID,RESID,FILEID,ID,BRANCH){
+		pid = PID;
+		resid = RESID;
+		fileid = FILEID;
+		id = ID;
+		branch = BRANCH;
+	}
+	function sub(){
+		window.location.href='/deletefile?pid='+this.pid+'&resid='+this.resid+'&fileid='+this.fileid+'&id='+this.id+'&branch='+this.branch;
+	}
+</script>
+{% endblock %}
 {% block table %}
 {% load static %}
-		<div class="container">
-			<div class="row">
-				<div class="card" style="margin-top:10px">
-					<h3>{{ branchInfo.1 }}</h3>
-					<h5>版本号 : {{ branchInfo.2 }}</h5>
-				</div>
-			</div>
+<div class="container">
+	<div class="row">
+		<div class="card" style="margin-top:10px">
+			<h3>{{ branchInfo.1 }}</h3>
+			<h5>版本号 : {{ branchInfo.2 }}</h5>
+		</div>
+	</div>
 
-			<hr>
-			<div class="row">
-				<table class="table w-100 text-center">
-					<tr>
-						<th>文件</th>
-						<th>后缀</th>
-						<th>说明</th>
-						<th>操作</th>
-					</tr>
-					{% block iterate %}
+	<hr>
+	<div class="row">
+		<table class="table w-100 text-center">
+			<tr>
+				<th>文件</th>
+				<th>后缀</th>
+				<th>说明</th>
+				<th>操作</th>
+			</tr>
+			{% block iterate %}
 
-					<form method="get" action="/branchremark">
-						<input name="id" value="{{ mid }}"   style=" display: none;" >
-						<input name="branch" value="{{ branch }}"  style=" display: none; ">
-					{% for file in posts.object_list %}
-						<tr>
-							<td>{{ file.5 }}</td>
-							<td>{{ file.6 }}</td>
-							<td>
-								<input name="{{ file.0 }}_{{ file.1 }}_{{ file.2 }}" value="{{ file.3 }}">
-							</td>
-							<td>
-								<button type="button" class="btn btn-danger" style="width:70px"  onclick="window.document.location = '/deletefile/?pid={{ file.0 }}&resid={{ file.1 }}&fileid={{ file.2 }}&id={{ mid }}&branch={{ branch }}' " >删除</button>
-<!--									<input name="id" value="{{ mid }}"   style=" display: none;" >-->
-<!--									<input type="file" name="fileupdate">-->
-<!--									<button type="button" class="btn btn-info" style="width:70px">迭代</button>-->
-							</td>
-						</tr>
-					{% endfor %}
-						<script>
-
-						</script>
-						<tr>
-							<td>
-								<button type="button" class="btn btn-success w-100" style="width:70px" onclick="window.document.location ='/branchIterate/?id={{ mid }}&branch={{ branchInfo.5 }}'"  >迭代</button>
-							</td>
-							<td></td>
-							<td colspan="2">
-							<input class="btn btn-info w-100" style="width:70px" type="submit"  value="提交修改">
-							</td>
-						</tr>
-					</form>
-					{% endblock %}
-				</table>
-			</div>
-			{% block fileupload %}
-			<form method="POST" action="/resBranchFileupload/" enctype="multipart/form-data">
+			<form method="get" action="/branchremark">
 				<input name="id" value="{{ mid }}"   style=" display: none;" >
 				<input name="branch" value="{{ branch }}"  style=" display: none; ">
-			<div class="row">
-				{% autoescape off %}
-				{{ branch_set }}
-				{% endautoescape %}
-<!--				文件上传按钮-->
-				<div class="col">
-					<input id="fileul" type="file" multiple = "multiple" class="btn btn-secondary w-100" style="margin-bottom: 20px;  " name="files">
-				</div>
-				<div class="col">
-				</div>
-				<div class="col">
-					<td><input type="submit" value="批量上传" class="btn btn-success w-100"></td>
+			{% for file in posts.object_list %}
+				<tr>
+					<td>{{ file.5 }}</td>
+					<td>{{ file.6 }}</td>
+					<td>
+						<input name="{{ file.0 }}_{{ file.1 }}_{{ file.2 }}" value="{{ file.3 }}">
+					</td>
+					<td>
+<!--						<button type="button" class="btn btn-danger" style="width:70px"  -->
+<!--								onclick="window.document.location = '/deletefile/?pid={{ file.0 }}&resid={{ file.1 }}&fileid={{ file.2 }}&id={{ mid }}&branch={{ 'branch' }}' " >删除</button>-->
+<!--						<button type="button" class="btn btn-danger" style="width:70px">删除</button>-->
+						<button type="button" class="btn-sm btn-danger" data-toggle="modal" data-target="#myModal" onclick="values('{{ file.0 }}','{{ file.1 }}','{{ file.2 }}','{{ mid }}','{{ branch }}')" >删除</button>
+					</td>
+				</tr>
+			{% endfor %}
+
+			<!-- 模态框（Modal） -->
+			<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+				<div class="modal-dialog">
+					<div class="modal-content">
+						<div class="modal-header">
+							<h4 class="modal-title" id="myModalLabel">确认删除？</h4>
+							<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+						</div>
+						<div class="modal-body">注意此操作不可逆！</div>
+						<div class="modal-footer">
+							<button type="button" class="btn btn-danger" onclick="sub()">是</button>
+							<button type="button" class="btn btn-default" data-dismiss="modal">否</button>
+						</div>
+					</div>
 				</div>
 			</div>
+
+				<tr>
+					<td>
+						<button type="button" class="btn btn-success w-100" style="width:70px" onclick="window.document.location ='/branchIterate/?id={{ mid }}&branch={{ branchInfo.5 }}'"  >迭代</button>
+					</td>
+					<td></td>
+					<td colspan="2">
+					<input class="btn btn-info w-100" style="width:70px" type="submit"  value="提交修改">
+					</td>
+				</tr>
 			</form>
 			{% endblock %}
+		</table>
+	</div>
+	{% block fileupload %}
+	<form method="POST" action="/resBranchFileupload/" enctype="multipart/form-data">
+		<input name="id" value="{{ mid }}"   style=" display: none;" >
+		<input name="branch" value="{{ branch }}"  style=" display: none; ">
+	<div class="row">
+		{% autoescape off %}
+		{{ branch_set }}
+		{% endautoescape %}
+<!--				文件上传按钮-->
+		<div class="col">
+			<input id="fileul" type="file" multiple = "multiple" class="btn btn-secondary w-100" style="margin-bottom: 20px;  " name="files">
 		</div>
+		<div class="col">
+		</div>
+		<div class="col">
+			<td><input type="submit" value="批量上传" class="btn btn-success w-100"></td>
+		</div>
+	</div>
+	</form>
+	{% endblock %}
+</div>
 {% endblock %}
+
+</td>

@@ -27,3 +27,22 @@
 </tbody>
 </table>
 {% endblock %}
+{% block page %}
+<table class="table col-4 pull-right">
+    <tr>
+        <td>{% if posts.has_previous %}
+            <a  href="/branchHistory/?page={{ posts.previous_page_number }}&id={{ mid }}&source={{ posts.object_list.0.6 }}">上一页</a>
+            {% endif %}
+        </td>
+        <td><input class="form-control-ms text-center" style="width: 45px;" id="nowpage" name="page" value="{{ page }}"/>
+         /<a name="pagemax" >{{ pagemax }}</a>
+        </td>
+        <td>
+            {% if posts.has_next %}
+            <a  href="/branchHistory/?page={{ posts.next_page_number }}&id={{ mid }}&source={{ posts.object_list.0.6 }}">下一页</a>
+            {% endif %}
+        </td>
+        <td><button class="btn btn-primary w-100" type="submit">跳转</button></td>
+    </tr>
+</table>
+{% endblock %}

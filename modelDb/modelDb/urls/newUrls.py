@@ -4,7 +4,7 @@ from django.conf import settings
 from django.contrib import admin
 from materials.views import materials,createMaterial,createMaterialTags,updateMaterialTags,updateMaterial,deleteMaterial,uploadFiles,uploadCover
 from modelRes.views import upload,resupload,resBranch,resource,branchFilePage,branchHistory,deletefile,branchremark,resBranchFileupload,newBranch,updateFile,branchIterate,giveupiterate,iterateFileupload,iterateCommit,historyFilePage
-from setPages.views import branchSet,createBranch,updateBranch
+from setPages.views import branchSet,createBranch,updateBranch,deleteModal
 from Login.views import login_view,logoutfunction
 from homePage.views import homePage
 from recycleBin.views import recycleBin,rollback
@@ -45,5 +45,6 @@ urlpatterns = [
     url(r'^iterateFileupload/', iterateFileupload),
     url(r'^iterateCommit/', iterateCommit),
     url(r'^historyFilePage/', historyFilePage),
+    url(r'^deleteModal/', deleteModal),
 
 ]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

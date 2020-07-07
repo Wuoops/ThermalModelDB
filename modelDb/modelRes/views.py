@@ -71,7 +71,6 @@ def resupload(request):
 @login_required
 def resBranch(request):
     mid = request.GET.get('id')
-
     #左侧详情
     materInfo = getMaterByid(str(mid))
     #获取封面html
@@ -82,12 +81,10 @@ def resBranch(request):
     materFileHtml = getMaterFileHtml(mid)
     # 获取版本信息
     branch = request.GET.get('branch')
-
     branchInfo = getBranchInfoByMaterId(mid,branch)
     #数据列表
     # list = resourceModel(mid)
     list = branchFilePageList(mid,branch)
-
     current_page = request.GET.get('page')
     if current_page is None:
         current_page = 1
@@ -232,7 +229,6 @@ def branchFilePage(request):
                                                     'mid':mid,'pagemax':pagemax})
 
 def branchHistory(request):
-
     mid = request.GET.get('id')
     #左侧详情
     materInfo = getMaterByid(str(mid))
@@ -265,7 +261,7 @@ def branchHistory(request):
                                                     'mid':mid,'pagemax':pagemax })
 
 
-
+# 删除按钮
 def deletefile(request):
 
     pid = request.GET.get('pid')
@@ -278,14 +274,17 @@ def deletefile(request):
     # sql = 'update d_res_path set iswork = 0 where pid = %s and res_id = %s and fileid = %s'
     args = [pid,resid,fileid]
 
+    isworksql ='select iswork from d_res_path  where pid = %s and res_id = %s and fileid = %s'
 
     obj = Utils()
+    iswork = obj.searchOneP(isworksql,args)[0]
     obj.create(sql,args)
     obj.commit()
     obj.close()
-
-    return redirect('/resBranch/?id='+str(mid)+'&branch='+str(branch))
-
+    if iswork == 1:
+        return redirect('/resBranch/?id='+str(mid)+'&branch='+str(branch))
+    else:
+        return redirect('/branchIterate/?id='+str(mid)+'&branch='+str(branch))
 
 def branchremark(request):
     mid = request.GET.get('id')

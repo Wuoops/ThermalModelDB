@@ -68,3 +68,8 @@ def updateBranch(request):
     mid = request.POST.get('id')
 
     return redirect('/resupload?id='+str(mid))
+
+@login_required
+def deleteModal(request):
+
+    return render(request,'deleteModal.html')

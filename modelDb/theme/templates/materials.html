@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load static %}
 {% block content %}
 {% load static %}
 
@@ -40,6 +41,7 @@
 			</tr>
 		</thead>
 		<tbody>
+<!--			<button type="button" class="btn-sm btn-danger" data-toggle="modal" data-target="#myModal" onclick="values(1)" >删除</button>-->
 			{% for col in  posts.object_list %}
 				<tr class="row">
 					<td class="col-1 text-truncate" title="{{col.4}}">{{col.4}}</td>
@@ -51,19 +53,17 @@
 					<td class="col-1 text-truncate" title="{{col.9}}">{{col.9}}</td>
 					<td class="col-1 text-truncate" title="{{col.6}}">{{col.6}}</td>
 					{% block mater %}
-					<td  class="col-2" onclick="event.stopPropagation()">
+					<td  class="col-2" >
 						<button type="button" class="btn-sm btn-info" onclick="window.document.location = '/resource?id={{col.0}}'" >详细信息</button>
 						<button type="button" class="btn-sm btn-warning" onclick="window.document.location = '/updateMaterial?id={{col.0}}'" >修改</button>
-						<button type="button" class="btn-sm btn-danger" onclick="window.document.location = '/deleteMaterial?id={{col.0}}'" >删除</button>
-						{{ superbtn }}
+<!--						<button type="button" class="btn-sm btn-danger" onclick="window.document.location = '/deleteMaterial?id={{col.0}}'" >删除</button>-->
+						<button type="button" class="btn-sm btn-danger" data-toggle="modal" data-target="#myModal" onclick="values({{col.0}})" >删除</button>
 					</td>
 					{% endblock %}
-
 				</tr>
 			{% endfor %}
 		</tbody>
 		</form>
-
 	</table>
 
 </div>
@@ -91,19 +91,48 @@
 	</table>
 	</div>
 </div>
+<!-- 模态框（Modal） -->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h4 class="modal-title" id="myModalLabel">确认删除？</h4>
+				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+			</div>
+			<div class="modal-body">稍后可在回收站恢复数据
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-danger" onclick="sub()">是</button>
+				<button type="button" class="btn btn-default" data-dismiss="modal">否</button>
+			</div>
+		</div>
+	</div>
+</div>
+</td>
 
 {% block script %}
-<script>
+<script type="text/JavaScript">
 function jumpToPage(){
 	var page = document.getElementById('nowpage').value;
 	console.log(page)
 	window.location.href="/materials/?page="+page;
 }
+function selected(data){
+	window.location.href="/materials?"+data.name+"="+data.value;
+}
+
 </script>
-<script type="text/JavaScript">
-	function selected(data){
-		window.location.href="/materials?"+data.name+"="+data.value;
+<script>
+	id=0
+	function values(ID){
+		id=ID
+		console.log(id)
+	}
+	function sub(){
+		window.location.href='/deleteMaterial?id='+id;
 	}
 </script>
 {% endblock %}
+
+
 {% endblock %}
